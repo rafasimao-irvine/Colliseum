@@ -10,7 +10,7 @@ public abstract class GameEffect : MonoBehaviour {
 	public AudioClip SoundEffect;
 
 	public enum EffectTarget {
-		None, Neighbours, Line, Target
+		None, OriginNeighbours, Line, Target
 	}
 
 	[SerializeField]
@@ -19,25 +19,51 @@ public abstract class GameEffect : MonoBehaviour {
 	protected int _EffectRange;
 
 	public void MakeEffect (Interactive origin, Interactive target) {
-		// Visual Effect
-		if (_VisualEffect != null)
-			_VisualEffect.MakeEffect(origin, target);
-		// Sound Effect
-		if (SoundEffect!=null && Sounds.Instance!=null)
-			Sounds.Instance.PlaySoundEffect(SoundEffect);
+		PlayVisualEffect(origin,target.MyTile);
+		PlaySoundEffect();
 
 		// Make Effect
 		switch (_EffectTarget) {
-		case EffectTarget.Neighbours:
+		case EffectTarget.OriginNeighbours:
 			DoEffectToNeighbours(origin);
 			break;
 		case EffectTarget.Line:
-			DoEffectToLine(origin, target);
+			DoEffectToLine(origin, target.MyTile);
 			break;
 		case EffectTarget.Target:
 			DoEffect(origin, target);
 			break;
 		}
+	}
+
+	public void MakeEffect (Interactive origin, Tile targetTile) {
+		PlayVisualEffect(origin,targetTile);
+		PlaySoundEffect();
+		
+		// Make Effect
+		switch (_EffectTarget) {
+		case EffectTarget.OriginNeighbours:
+			DoEffectToNeighbours(origin);
+			break;
+		case EffectTarget.Line:
+			DoEffectToLine(origin, targetTile);
+			break;
+		case EffectTarget.Target:
+			DoEffect(origin, targetTile);
+			break;
+		}
+	}
+
+	protected void PlayVisualEffect (Interactive origin, Tile target) {
+		// Visual Effect
+		if (_VisualEffect != null)
+			_VisualEffect.MakeEffect(origin, target);
+	}
+
+	protected void PlaySoundEffect () {
+		// Sound Effect
+		if (SoundEffect!=null && Sounds.Instance!=null)
+			Sounds.Instance.PlaySoundEffect(SoundEffect);
 	}
 
 
@@ -46,9 +72,9 @@ public abstract class GameEffect : MonoBehaviour {
 		DoEffectToManyTargets(origin,tiles);
 	}
 
-	protected void DoEffectToLine (Interactive origin, Interactive target) {
+	protected void DoEffectToLine (Interactive origin, Tile targetTile) {
 		List<Tile> tiles = MapController.Instance.GetLine(
-			origin.MyTile, MapController.Instance.GetDirection(target.MyTile,origin.MyTile), _EffectRange);
+			origin.MyTile, MapController.Instance.GetDirection(targetTile, origin.MyTile), _EffectRange);
 		DoEffectToManyTargets(origin,tiles);
 	}
 
@@ -60,5 +86,10 @@ public abstract class GameEffect : MonoBehaviour {
 	}
 
 	abstract protected void DoEffect (Interactive origin, Interactive target);
+
+	virtual protected void DoEffect (Interactive origin, Tile targetTile) {
+		if (targetTile.OnTop != null)
+			DoEffect(origin, targetTile.OnTop);
+	}
 
 }

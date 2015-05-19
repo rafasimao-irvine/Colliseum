@@ -127,9 +127,9 @@ public class Accessory {
 
 	#region Actives
 	public void Activate (Interactive origin, Tile target) {
-		if (_ActivateEffect!=null && target.OnTop!=null) {
+		if (_ActivateEffect!=null && target!=null) {
 			if (MadeAction())
-				_ActivateEffect.MakeEffect(origin, target.OnTop);
+				_ActivateEffect.MakeEffect(origin, target);
 		}
 	}
 	#endregion

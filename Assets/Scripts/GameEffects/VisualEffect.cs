@@ -13,7 +13,7 @@ public class VisualEffect : MonoBehaviour {
 	[SerializeField]
 	protected EffectType _Type;
 
-	public void MakeEffect (Interactive origin, Interactive target) {
+	public void MakeEffect (Interactive origin, Tile target) {
 		switch (_Type) {
 		case EffectType.FromOrigin:
 			DoEffect(origin.transform.position);

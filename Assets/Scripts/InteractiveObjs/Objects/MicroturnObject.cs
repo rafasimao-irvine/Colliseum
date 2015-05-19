@@ -24,7 +24,7 @@ public class MicroturnObject : MonoBehaviour {
 		if (_CurrentTurnMod >= _TurnRate) {
 			_CurrentTurnMod = 0;
 			for (int i=0; i<_TurnChangeEffects.Count; i++)
-				_TurnChangeEffects[i].MakeEffect(_InteractiveObject, null);
+				_TurnChangeEffects[i].MakeEffect(_InteractiveObject, _InteractiveObject);
 		}
 	}
 
