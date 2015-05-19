@@ -14,6 +14,7 @@ public class CharactherMovement {
 
 	// Movement fields
 	private const float _Speed = 6f;
+	private float _SpeedModifier = 0f; // Used to give burst or slow movement effects
 	private Vector3 _VectorSpeed;
 	private Vector3 _MoveTo;
 	private Tile _MoveToTile;
@@ -117,7 +118,7 @@ public class CharactherMovement {
 		
 		// Calculate VectorSpeed
 		Vector3 diff = _MoveTo - _Transform.position;
-		_VectorSpeed = diff.normalized * _Speed;
+		_VectorSpeed = diff.normalized * GetSpeed();
 		
 		// Animation
 		_Animation.CrossFade("Walk");
@@ -156,6 +157,15 @@ public class CharactherMovement {
 		_MovementFeats.AddFeat(feat);
 	}
 	//--------------------------------------------------
+
+	// Speed
+	public float GetSpeed () {
+		return _Speed+_SpeedModifier;
+	}
+
+	public void SetSpeedModifier (float mod) {
+		_SpeedModifier = mod;
+	}
 
 	/**
 	 * Is this characther moving?
