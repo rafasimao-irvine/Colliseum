@@ -35,6 +35,7 @@ public class PortalEffect : GameEffect {
 		if (tile.OnTop==null || !tile.OnTop.Blockable) {
 			if (target is Characther) 
 				((Characther)target).AddMovementFeat(new PortalFeat(_Clone.MyTile, tile));
+			if (target is Personage) ((Personage)target).InterruptActions();
 		}
 
 	}
