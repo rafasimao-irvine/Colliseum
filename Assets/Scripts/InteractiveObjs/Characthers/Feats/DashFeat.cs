@@ -4,11 +4,12 @@ using System.Collections;
 public class DashFeat : IFeat {
 
 	private Tile _Target;
-	private float _SpeedModifier = 6f;
+	private float _SpeedModifier;
 	private bool _Finished;
 
-	public DashFeat (Tile target) {
+	public DashFeat (Tile target, float speedMod) {
 		Reset(target);
+		_SpeedModifier = speedMod;
 	}
 
 	public void Start (Characther c, CharactherMovement cMove) {

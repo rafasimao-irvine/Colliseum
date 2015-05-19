@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 public class DashEffect : GameEffect {
 
+	[SerializeField]
+	protected float _DashSpeed;
+
 	protected override void DoEffect (Interactive origin, Interactive target) {
 		if (target.MyTile!=null)
 			DoEffect(origin,target.MyTile);
@@ -26,7 +29,8 @@ public class DashEffect : GameEffect {
 			}
 
 			if (selected >= 0 && origin != null) {
-				if (origin is Characther) ((Characther)origin).AddMovementFeat(new DashFeat(line[selected]));
+				if (origin is Characther) 
+					((Characther)origin).AddMovementFeat(new DashFeat(line[selected], _DashSpeed));
 				if (origin is Personage) ((Personage)origin).InterruptActions();
 			}
 		}
