@@ -132,7 +132,7 @@ public class CharactherAccessories {
 	#endregion
 
 	#region Actives
-	public void OnButtonPressed (int index, Characther c, Tile onTile) {
+	public void Activate (int index, Characther c, Tile onTile) {
 		if (_Accessories[index]!=null)
 			_Accessories[index].Activate(c,onTile);
 	}

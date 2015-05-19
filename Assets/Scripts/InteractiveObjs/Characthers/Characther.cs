@@ -135,7 +135,7 @@ public abstract class Characther : Attackable {
 	}
 
 	// Itens --------------------------------------------
-	// Weapon
+	/* Weapon *********/
 	public Weapon TryToEquip (Weapon weapon) {
 		return _CharWeapons.EquipWeapon(weapon, CharactherWeapons.WeaponHand.FirstHand);
 	}
@@ -152,7 +152,7 @@ public abstract class Characther : Attackable {
 		return _CharWeapons.GetSecondWeapon();
 	}
 
-	// Accessories
+	/* Accessories ********/
 	public Accessory TryToEquip (Accessory accessory) {
 		return _CharAccessories.EquipAccessory(accessory, _CharAccessories.GetFreeSpot());
 	}
@@ -163,6 +163,11 @@ public abstract class Characther : Attackable {
 
 	public void RemoveAccessory (int pos) {
 		_CharAccessories.RemoveAccessory(pos);
+	}
+
+	// Accessory Action
+	public void ActivateAccessory (int index, Tile tile) {
+		_CharAccessories.Activate(index, this, tile);
 	}
 
 	// Getters ---------------------------------------------

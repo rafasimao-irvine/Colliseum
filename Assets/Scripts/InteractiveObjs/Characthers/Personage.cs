@@ -12,13 +12,16 @@ public class Personage : Characther {
 		None = 0,
 		Move = 1,
 		Attack = 2,
-		Interact = 3
+		Interact = 3,
+		ActivateAccessory = 4
 	};
 	protected Interactions _InteractionType = Interactions.None;
 
 	// Targeting
 	protected Tile _TargetTile;
 	protected Interactive _TargetInteractive;
+
+	protected int _AccessoryIndex;
 
 	public List<Tile> path;
 
@@ -50,7 +53,7 @@ public class Personage : Characther {
 			else
 				_InteractionType = Interactions.Move;
 		// Movement
-		}else
+		} else
 			_InteractionType = Interactions.Move;
 
 		// Set target
@@ -67,6 +70,12 @@ public class Personage : Characther {
 
 	public void PrepareWaitAction () {
 		_WaitAction = true;
+	}
+
+	public void PrepareAccessoryAction (int index, Tile tile) {
+		_AccessoryIndex = index;
+		SetTarget(tile, null);
+		_InteractionType = Interactions.ActivateAccessory;
 	}
 
 	/**
@@ -94,6 +103,9 @@ public class Personage : Characther {
 			break;
 		case Interactions.Move:
 			result = MakeMoveAction(_TargetTile);
+			break;
+		case Interactions.ActivateAccessory:
+			result = MakeAccessoryAction();
 			break;
 		}
 		SelectPath(true);
@@ -142,6 +154,12 @@ public class Personage : Characther {
 		if(path[0]==target) InterruptActions();
 
 		return true; // Return that an action occurred
+	}
+
+	private bool MakeAccessoryAction () {
+		ActivateAccessory(_AccessoryIndex,_TargetTile);
+		InterruptActions();
+		return true;
 	}
 
 	public void InterruptActions () {

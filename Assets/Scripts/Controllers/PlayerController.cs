@@ -23,6 +23,10 @@ public class PlayerController : TurnController {
 	private float _PressTimer;
 	public InfoHUD PCInfoHUD;
 
+	// Accessory Action
+	private bool _IsAccessoryAction;
+	private int _AccessoryIndex;
+
 	// Update is called once per frame -----------------------------------
 	void Update () {
 #if UNITY_EDITOR
@@ -62,11 +66,8 @@ public class PlayerController : TurnController {
 		_CurrentSwipe = _SecondPressPos - _FirstPressPos;
 		
 		// If it a tap action
-		if (_CurrentSwipe.magnitude<0.6f && (Time.time-_FirstPressTime)<0.2f && tile != null) {
-			// Make an action with the selected char
-			if(PlayerPersonage.MyTile != tile)
-				PlayerPersonage.PrepareActionsTarget(tile); // prepare action
-		}
+		if (_CurrentSwipe.magnitude<0.6f && (Time.time-_FirstPressTime)<0.2f && tile != null)
+			TapAction(tile);
 	}
 
 	private void HoldPressAction (Vector3 pos, int id) {
@@ -78,8 +79,9 @@ public class PlayerController : TurnController {
 		GetClickHitInfo(pos, out dif, out tile, id);
 
 		dif = dif - _FirstPressPos;
-		if(dif.magnitude < 1 && tile != null && tile.OnTop!=null)
-			PCInfoHUD.ShowInfo(tile.OnTop);
+
+		if (dif.magnitude < 1)
+			HoldAction(tile);
 	}
 
 	private bool GetClickHitInfo (Vector3 pos, out Vector3 hitPos, out Tile hitTile, int id) {
@@ -137,6 +139,24 @@ public class PlayerController : TurnController {
 
 	}
 
+	// Actions ------------------------------------------------------------
+	private void TapAction (Tile tile) {
+		if (!_IsAccessoryAction) {
+			// Make an action with the selected char
+			if(PlayerPersonage.MyTile != tile)
+				PlayerPersonage.PrepareActionsTarget(tile); // prepare action
+		}
+		else {
+			PlayerPersonage.PrepareAccessoryAction(_AccessoryIndex, tile);
+			_IsAccessoryAction = false;
+		}
+	}
+
+	private void HoldAction (Tile tile) {
+		if(tile != null && tile.OnTop!=null)
+			PCInfoHUD.ShowInfo(tile.OnTop);
+	}
+
 	// Button Actions -----------------------------------------------------
 	public void MakeWaitAction () {
 		PlayerPersonage.PrepareWaitAction();
@@ -144,6 +164,16 @@ public class PlayerController : TurnController {
 
 	public void SwitchWeapons () {
 		PlayerPersonage.SwitchWeapons();
+	}
+
+	public void AccessoryAction (int index) {
+		_IsAccessoryAction = true;
+		_AccessoryIndex = index;
+	}
+
+	public void CancelAccessoryAction (int index) {
+		if (index==_AccessoryIndex)
+			_IsAccessoryAction = false;
 	}
 
 	// Turn Controller ----------------------------------------------------
