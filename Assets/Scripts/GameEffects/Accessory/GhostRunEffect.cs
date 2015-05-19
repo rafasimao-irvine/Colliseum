@@ -12,7 +12,9 @@ public class GhostRunEffect : GameEffect {
 	}
 
 	protected override void DoEffect (Interactive origin, Tile targetTile) {
-		if (origin.MyTile != targetTile) {
+		if (origin.MyTile != targetTile && 
+		    (targetTile.OnTop == null || (targetTile.OnTop!=null && !targetTile.OnTop.Blockable)) ) {
+
 			if (MapController.Instance.GetNeighbours(origin.MyTile, _EffectRange).Contains(targetTile)) {
 				if (origin is Characther) 
 					((Characther)origin).AddMovementFeat(new DashFeat(targetTile, _GhostSpeed));
