@@ -66,8 +66,11 @@ public class SlideFeat : IFeat {
 	protected void StopMoveCharTo () {
 		if (!_TileTarget.TryGetIn(_Characther))
 			_CharactherMovement.AddMoveTo(_Characther.MyTile);
-		else
+		else {
+			if (_Characther.IsDead())
+				_TileTarget.TryGetOut(_Characther);
 			_Characther.SetMyTile(_TileTarget);
+		}
 
 		_IsMoving = false;
 	}
