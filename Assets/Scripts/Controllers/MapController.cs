@@ -175,7 +175,16 @@ public class MapController : MonoBehaviour {
 	 * Get the distance between two tiles.
 	 */
 	public int GetDistance(Tile start, Tile end) {
-		return (int)(end.transform.position - start.transform.position).magnitude;
+		return GetCubeDistance(GetCubeCoordinates(start.X,start.Y), GetCubeCoordinates(end.X,end.Y));
+		//return (int)(end.transform.position - start.transform.position).magnitude;
+	}
+
+	public Vector3 GetCubeCoordinates (int q, int r) {
+		return new Vector3(q, -q-r, r);
+	}
+
+	public int GetCubeDistance (Vector3 a, Vector3 b) {
+		return (int)((Mathf.Abs(a.x-b.x) + Mathf.Abs(a.y-b.y) + Mathf.Abs(a.z-b.z))/2);
 	}
 
 	//Get all the tiles neighbours of the referred tile
