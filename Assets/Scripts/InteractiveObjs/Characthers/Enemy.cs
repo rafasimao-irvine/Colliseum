@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Enemy : Characther {
 
 	[HideInInspector]
-	public Personage PlayerPersonage;
+	public Characther TargetChar;
 
 	// Attributes
 	[SerializeField]
@@ -45,22 +45,22 @@ public class Enemy : Characther {
 		MapController mapController = MapController.Instance;
 		// If it is close to the target personage, perceive it!
 		if (!_SawPersonage && 
-		    mapController.GetNeighbours(MyTile,GetVisonRange()).Contains(PlayerPersonage.MyTile)) {
+		    mapController.GetNeighbours(MyTile,GetVisonRange()).Contains(TargetChar.MyTile)) {
 			_SawPersonage = true;
-			PlayerPersonage.BeSaw(this);
-			BeSaw(PlayerPersonage);
+			TargetChar.BeSaw(this);
+			BeSaw(TargetChar);
 			Logger.strLog += gameObject.name.Substring(0,gameObject.name.Length-7)+" saw you!\n";
 			return true; // END the action
 		}
 
 		// If it haven't seen the player yet
-		if (!_SawPersonage || PlayerPersonage.IsDead()) {
+		if (!_SawPersonage || TargetChar.IsDead()) {
 			PerformAction(_NoPersonageAction);
 			return true; // END the action
 		}
 
 		// If it is close to the target personage, attack!
-		if (mapController.GetNeighbours(MyTile,GetCurrentAttackRange()).Contains(PlayerPersonage.MyTile)) {
+		if (mapController.GetNeighbours(MyTile,GetCurrentAttackRange()).Contains(TargetChar.MyTile)) {
 			PerformAction(_PersonageInRangeAction);
 			return true; // END the action
 		}
@@ -72,7 +72,7 @@ public class Enemy : Characther {
 	}
 
 	protected int GetVisonRange () {
-		int result = _VisionRange + PlayerPersonage.UseEnemyVisionModifier();
+		int result = _VisionRange + TargetChar.UseEnemyVisionModifier();
 		return (result<1) ? 1 : result;
 	}
 
@@ -104,7 +104,7 @@ public class Enemy : Characther {
 	}
 
 	protected void FollowPersonage () {
-		List<Tile> path = MapController.Instance.FindPath(MyTile, PlayerPersonage.MyTile);
+		List<Tile> path = MapController.Instance.FindPath(MyTile, TargetChar.MyTile);
 		
 		// Start the movement
 		if (path != null && path.Count > 0)
@@ -113,7 +113,7 @@ public class Enemy : Characther {
 
 	protected void AttackPersonage () {
 		if (IsAttackReady())
-			Attack(PlayerPersonage);
+			Attack(TargetChar);
 	}
 	#endregion -------------------------------------------
 

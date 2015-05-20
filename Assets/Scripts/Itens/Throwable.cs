@@ -51,6 +51,11 @@ public class Throwable : MonoBehaviour {
 		if (c!=null)
 			_CollisionEffect.MakeEffect(_Origin,c);
 
+		if (other.rigidbody!=null) {
+			other.rigidbody.angularVelocity = Vector3.zero;
+			other.rigidbody.velocity = Vector3.zero;
+		}
+
 		gameObject.SetActive(false);
 	}
 

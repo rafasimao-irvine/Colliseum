@@ -61,7 +61,7 @@ public class EnemiesController : TurnController {
 			int quantity = Enemies[i].RandQuantity;
 			for (int q=0; q<quantity; q++){
 				_Enemies.Add(GeneralFabric.CreateObject<Enemy>(Enemies[i].Prefab, transform));
-				_Enemies[_Enemies.Count-1].PlayerPersonage = PlayerController.PlayerPersonage;
+				_Enemies[_Enemies.Count-1].TargetChar = PlayerController.PlayerPersonage;
 				MapController.Instance.PlaceIt(
 					MapController.Instance.GetMapTiles(), _Enemies[_Enemies.Count-1]);
 			}
