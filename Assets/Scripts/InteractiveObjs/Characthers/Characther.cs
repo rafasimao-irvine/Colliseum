@@ -69,6 +69,8 @@ public abstract class Characther : Attackable {
 		// If it is dead, do nothing
 		bool result = (IsDead() || _CharStatus.IsTrapped());
 
+		if (IsInAction()) return false;
+
 		// Make microturn action
 		if (!result) 
 			result = MakeTurnAction();
