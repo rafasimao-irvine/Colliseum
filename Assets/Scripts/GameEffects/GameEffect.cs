@@ -10,7 +10,7 @@ public abstract class GameEffect : MonoBehaviour {
 	public AudioClip SoundEffect;
 
 	public enum EffectTarget {
-		None, OriginNeighbours, Line, Target
+		None, OriginNeighbours, Line, Target, TargetBlock
 	}
 
 	[SerializeField]
@@ -33,6 +33,9 @@ public abstract class GameEffect : MonoBehaviour {
 		case EffectTarget.Target:
 			DoEffect(origin, target);
 			break;
+		case EffectTarget.TargetBlock:
+			DoEffectToBlock(origin, target.MyTile);
+			break;
 		}
 	}
 
@@ -50,6 +53,9 @@ public abstract class GameEffect : MonoBehaviour {
 			break;
 		case EffectTarget.Target:
 			DoEffect(origin, targetTile);
+			break;
+		case EffectTarget.TargetBlock:
+			DoEffectToBlock(origin, targetTile);
 			break;
 		}
 	}
@@ -75,6 +81,11 @@ public abstract class GameEffect : MonoBehaviour {
 	protected void DoEffectToLine (Interactive origin, Tile targetTile) {
 		List<Tile> tiles = MapController.Instance.GetLine(
 			origin.MyTile, MapController.Instance.GetDirection(targetTile, origin.MyTile), _EffectRange);
+		DoEffectToManyTargets(origin,tiles);
+	}
+
+	protected void DoEffectToBlock (Interactive origin, Tile targetTile) {
+		List<Tile> tiles = MapController.Instance.GetBlock(targetTile, _EffectRange);
 		DoEffectToManyTargets(origin,tiles);
 	}
 
