@@ -4,13 +4,16 @@ using System.Collections.Generic;
 using System.Linq;
 
 public class MapController : MonoBehaviour { 
-	
+
+	#region Variables --------------------------
 	// Tiles
 	public TileCreator MapTileCreator;
 
 	// MapTiles
 	protected Tile[,] _MapTiles;
+	#endregion
 
+	#region Singleton ------------------------------------------
 	public static MapController Instance {get; private set;}
 
 	void Awake () {
@@ -22,7 +25,9 @@ public class MapController : MonoBehaviour {
 		// Here we save our singleton instance
 		Instance = this;
 	}
+	#endregion
 
+	#region MapCreation -----------------------------------------
 	/**
 	 * Create the map and put on the obstacles of the arena.
 	 */
@@ -31,7 +36,9 @@ public class MapController : MonoBehaviour {
 		//_MapTiles= MapTileCreator.CreatePrismTiles();
 		_MapTiles= MapTileCreator.CreateFullTiles();
 	}
+	#endregion
 
+	#region Placing Stuff in the map -----------------------------
 	public Tile GetRandomFreeTile () {
 		Tile tile = null;
 		// Randomly finds a spot in the arena
@@ -61,8 +68,9 @@ public class MapController : MonoBehaviour {
 		// And tells it is on its top
 		iObj.RefreshMyTile();
 	}
+	#endregion
 
-
+	#region PathFinding ------------------------------------------
 	/**
 	 * Finds the best path from one tile to another.
 	 * return the list of tiles that represent the path.
@@ -170,7 +178,9 @@ public class MapController : MonoBehaviour {
 
 		return path;
 	}
+	#endregion
 
+	#region Getting Tiles distance -------------------------------
 	/**
 	 * Get the distance between two tiles.
 	 */
@@ -186,7 +196,37 @@ public class MapController : MonoBehaviour {
 	public int GetCubeDistance (Vector3 a, Vector3 b) {
 		return (int)((Mathf.Abs(a.x-b.x) + Mathf.Abs(a.y-b.y) + Mathf.Abs(a.z-b.z))/2);
 	}
+	#endregion
 
+	#region Sorting Tiles ----------------------------------------
+	public void SortTilesByDistanceTo (List<Tile> tiles, Tile reference) {
+		int[] distances = new int[tiles.Count];
+
+		for (int i=0; i<tiles.Count; i++)
+			distances[i] = GetDistance(tiles[i], reference);
+
+		bool ended = false;
+		while (!ended) {
+			ended = true;
+			for (int i=0; i<(tiles.Count-1); i++) {
+				if (distances[i] > distances[i+1]) {
+					Tile auxTile = tiles[i+1];
+					int auxDist = distances[i+1];
+
+					tiles[i+1] = tiles[i];
+					distances[i+1] = distances[i];
+
+					tiles[i] = auxTile;
+					distances[i] = auxDist;
+
+					ended = false;
+				}
+			}
+		}
+	}
+	#endregion
+
+	#region Getting Tiles ----------------------------------------
 	//Get all the tiles neighbours of the referred tile
 	public List<Tile> GetNeighbours (Tile tile, int range =1) {
 		if(tile==null || range<1)
@@ -305,7 +345,9 @@ public class MapController : MonoBehaviour {
 
 		return line;
 	}
+	#endregion
 
+	#region Getting Tiles directions -----------------------------
 	public Vector2 GetDirection (Tile origin, Tile destin) {
 		Vector2 result = new Vector2();
 		result.x = destin.X - origin.X;
@@ -326,7 +368,9 @@ public class MapController : MonoBehaviour {
 		if(result<-1) result=-1;
 		return result;
 	}
+	#endregion
 
+	#region Validating Tiles -------------------------------------
 	private bool IsItValidTileXY (int x, int y) {
 		if ((x>-1 && x<_MapTiles.GetLength(0)) && 
 		    (y>-1 && y<_MapTiles.GetLength(1)) && 
@@ -335,12 +379,15 @@ public class MapController : MonoBehaviour {
 
 		return false;
 	}
+	#endregion
 
+	#region Map Getter ----------------------------------
 	/**
 	 * Returns the arena matrix.
 	 */
 	public Tile[,] GetMapTiles(){
 		return _MapTiles;
 	}
+	#endregion
 
 }
