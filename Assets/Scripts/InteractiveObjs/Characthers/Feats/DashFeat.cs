@@ -3,23 +3,23 @@ using System.Collections;
 
 public class DashFeat : IFeat {
 
-	private Tile _Target;
-	private float _SpeedModifier;
-	private bool _Finished;
+	protected Tile _Target;
+	protected float _SpeedModifier;
+	protected bool _Finished;
 
 	public DashFeat (Tile target, float speedMod) {
 		Reset(target);
 		_SpeedModifier = speedMod;
 	}
 
-	public void Start (Characther c, CharactherMovement cMove) {
+	virtual public void Start (Characther c, CharactherMovement cMove) {
 		cMove.SetSpeedModifier(_SpeedModifier);
 		cMove.AddMoveTo(_Target);
 		cMove.SetSpeedModifier(0f);
 		_Finished = true;
 	}
 
-	public void Update () {
+	virtual public void Update () {
 		// Do nothing
 	}
 

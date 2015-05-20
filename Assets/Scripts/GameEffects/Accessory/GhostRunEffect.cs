@@ -17,7 +17,7 @@ public class GhostRunEffect : GameEffect {
 
 			if (MapController.Instance.GetNeighbours(origin.MyTile, _EffectRange).Contains(targetTile)) {
 				if (origin is Characther) 
-					((Characther)origin).AddMovementFeat(new DashFeat(targetTile, _GhostSpeed));
+					((Characther)origin).AddMovementFeat(new GhostRunFeat(targetTile, _GhostSpeed));
 				if (origin is Personage) ((Personage)origin).InterruptActions();
 			}
 		}
