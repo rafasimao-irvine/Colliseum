@@ -53,7 +53,7 @@ public class ObjectReceiver : MonoBehaviour, IReceiver {
 		return (_Permanent || _Durability>0);
 	}
 
-	// Destroy the object and set the characther inside it to be at its tile
+	// Destroy the object
 	public void BeDestroyed () {
 		_InteractiveObject.MyTile.TryGetOut(_InteractiveObject);
 		Destroy(gameObject);
