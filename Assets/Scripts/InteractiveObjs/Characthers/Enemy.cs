@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class Enemy : Characther {
 
-	[HideInInspector]
+	//[HideInInspector]
 	public Characther TargetChar;
 
 	// Attributes
@@ -37,6 +37,7 @@ public class Enemy : Characther {
 			TryToEquip(_InitialWeapon.GetWeapon());
 	}
 
+	#region Enemy Actions --------------------------------------
 	/**
 	 * The enemy makes its AI action.
 	 * Returns 0 to say it ended well, otherwise returns > 0.
@@ -91,6 +92,7 @@ public class Enemy : Characther {
 			break;
 		}
 	}
+	#endregion
 
 	#region AI Actions -----------------------------------
 	protected void MoveRandom () {
@@ -138,4 +140,8 @@ public class Enemy : Characther {
 	}
 	#endregion --------------------------------------------
 
+	public void RevealTargetCharacther () {
+		_SawPersonage = true;
+		BeSaw(TargetChar);
+	}
 }
