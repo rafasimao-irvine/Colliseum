@@ -56,6 +56,10 @@ public class MapController : MonoBehaviour {
 		PlaceItAt(iObj, GetRandomFreeTile());
 	}
 
+	public void PlaceIt (Interactive iObj) {
+		PlaceIt(_MapTiles, iObj);
+	}
+
 	public void PlaceItAt (Interactive iObj, Tile tile) {
 		// Sets the iObj position
 		iObj.transform.position = new Vector3(
@@ -67,6 +71,11 @@ public class MapController : MonoBehaviour {
 		tile.TryGetIn(iObj);
 		// And tells it is on its top
 		iObj.RefreshMyTile();
+	}
+
+	public void PlaceItAt (Interactive iObj, int x, int y) {
+		if (IsItValidTileXY(x,y))
+			PlaceItAt(iObj, _MapTiles[x,y]);
 	}
 	#endregion
 
