@@ -62,9 +62,20 @@ public class EnemiesController : TurnController {
 			for (int q=0; q<quantity; q++){
 				_Enemies.Add(GeneralFabric.CreateObject<Enemy>(Enemies[i].Prefab, transform));
 				_Enemies[_Enemies.Count-1].TargetChar = PlayerController.PlayerPersonage;
+
 				MapController.Instance.PlaceIt(
 					MapController.Instance.GetMapTiles(), _Enemies[_Enemies.Count-1]);
 			}
+		}
+	}
+
+	public void LoadEnemies (ObjectStance[] enemiesStances) {
+		for (int i=0; i<enemiesStances.Length; i++) {
+			_Enemies.Add(GeneralFabric.CreateObject<Enemy>(enemiesStances[i].Prefab, transform));
+			_Enemies[_Enemies.Count-1].TargetChar = PlayerController.PlayerPersonage;
+
+			MapController.Instance.PlaceItAt(
+				_Enemies[_Enemies.Count-1],enemiesStances[i].X,enemiesStances[i].Y);
 		}
 	}
 

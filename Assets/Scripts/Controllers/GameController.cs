@@ -14,15 +14,19 @@ public class GameController : MonoBehaviour {
 	public ObjectsController GCObjectsController;
 	public MapController GCMapController;
 
+	public bool IsLoadLevel;
+	public MoldedLevel Level;
+
 	// Use this for initialization
 	void Start () {
 
 		GCMapController.CreateMap(); // Create arena
-		GCObjectsController.CreateObjects(); // And its objects
 
-		// Gives the player controller to the enemies
-		GCEnemiesController.PlayerController = GCPlayerController;
-		GCEnemiesController.CreateEnemies(); // Create enemies
+		// Objects and Enemies Generation
+		if (IsLoadLevel && Level != null)
+			LoadLevel(); 
+		else 
+			CreateRandomLevel();
 
 		// Place all the personages
 		GCMapController.PlaceIt(GCMapController.GetMapTiles(),
@@ -31,6 +35,22 @@ public class GameController : MonoBehaviour {
 		// Sets the player to start the game
 		_CurrentTurn = Turns.PlayerTurn;
 		GCPlayerController.StartMyTurn();
+	}
+
+	private void CreateRandomLevel () {
+		GCObjectsController.CreateObjects(); // And its objects
+		
+		// Gives the player controller to the enemies
+		GCEnemiesController.PlayerController = GCPlayerController;
+		GCEnemiesController.CreateEnemies(); // Create enemies
+	}
+
+	private void LoadLevel () {
+		GCObjectsController.LoadObjects(Level.Objects); // And its objects
+		
+		// Gives the player controller to the enemies
+		GCEnemiesController.PlayerController = GCPlayerController;
+		GCEnemiesController.LoadEnemies(Level.Enemies); // Create enemies
 	}
 
 	// Update is called once per frame

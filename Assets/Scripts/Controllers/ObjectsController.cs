@@ -20,9 +20,19 @@ public class ObjectsController : TurnController {
 			int quantity = Objects[i].RandQuantity;
 			for (int q=0; q<quantity; q++){
 				_Objects.Add(GeneralFabric.CreateObject<Interactive>(Objects[i].Prefab, transform));
+
 				MapController.Instance.PlaceIt(
 					MapController.Instance.GetMapTiles(), _Objects[_Objects.Count-1]);
 			}
+		}
+	}
+
+	public void LoadObjects (ObjectStance[] objsStances) {
+		for (int i=0; i<objsStances.Length; i++) {
+			_Objects.Add(GeneralFabric.CreateObject<Interactive>(objsStances[i].Prefab, transform));
+
+			MapController.Instance.PlaceItAt(
+				_Objects[_Objects.Count-1], objsStances[i].X, objsStances[i].Y);
 		}
 	}
 

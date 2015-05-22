@@ -4,8 +4,8 @@ using System.Collections.Generic;
 
 public class CreatorManager : MonoBehaviour {
 
-	List<GameObject> _Objs = new List<GameObject>();
-	List<int> _Xs = new List<int>(), _Ys= new List<int>();
+	List<ObjectStance> _Objs = new List<ObjectStance>();
+	List<ObjectStance> _Enemies = new List<ObjectStance>();
 
 	#region Singleton ------------------------------------------
 	public static CreatorManager Instance {get; private set;}
@@ -26,17 +26,17 @@ public class CreatorManager : MonoBehaviour {
 	}
 
 	public void AddGameObject (GameObject prefab, int x, int y) {
-		_Objs.Add(prefab);
-		_Xs.Add(x);
-		_Ys.Add(y);
+		if (prefab.GetComponent<Characther>()!=null)
+			_Enemies.Add(new ObjectStance(prefab,x,y));
+		else
+			_Objs.Add(new ObjectStance(prefab,x,y));
 	}
 
 	public MoldedLevel GetMoldedLevel () {
 
 		MoldedLevel level = ScriptableObject.CreateInstance("MoldedLevel") as MoldedLevel;
 		level.Objects = _Objs.ToArray();
-		level.Xs = _Xs.ToArray();
-		level.Ys = _Ys.ToArray();
+		level.Enemies = _Enemies.ToArray();
 
 		return level;
 	}

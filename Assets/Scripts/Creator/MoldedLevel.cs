@@ -3,7 +3,6 @@ using System.Collections;
 
 public class MoldedLevel : ScriptableObject {
 
-	public GameObject[] Objects;
-	public int[] Xs,Ys;
+	public ObjectStance[] Objects, Enemies;
 
 }
