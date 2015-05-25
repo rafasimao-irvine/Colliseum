@@ -37,11 +37,13 @@ public class GameController : MonoBehaviour {
 		GCPlayerController.StartMyTurn();
 	}
 
+	// Random Creation
 	private void CreateRandomLevel () {
 		GCObjectsController.CreateObjects(); // And its objects
 		GCEnemiesController.CreateEnemies(); // Create enemies
 	}
 
+	// Load Creation
 	private void LoadLevel () {
 		GCObjectsController.LoadObjects(Level.Objects); // And its objects
 		GCEnemiesController.LoadEnemies(Level.Enemies); // Create enemies
