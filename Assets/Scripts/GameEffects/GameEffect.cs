@@ -9,14 +9,16 @@ public abstract class GameEffect : MonoBehaviour {
 
 	public AudioClip SoundEffect;
 
+	// Tiles the Effect will occur On
 	public enum EffectTarget {
 		None, OriginNeighbours, Line, Target, TargetBlock
 	}
-
 	[SerializeField]
 	protected EffectTarget _EffectTarget;
+
+	// Effect Range, used to refer to the Effect Target
 	[SerializeField]
-	protected int _EffectRange;
+	private int _EffectRange;
 
 	public void MakeEffect (Interactive origin, Interactive target) {
 		PlayVisualEffect(origin,target.MyTile);

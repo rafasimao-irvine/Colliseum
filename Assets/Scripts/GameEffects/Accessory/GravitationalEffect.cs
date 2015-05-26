@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 public class GravitationalEffect : GameEffect {
 
+	[SerializeField]
+	private int _GravityRange;
+
 	protected override void DoEffect (Interactive origin, Interactive target) {
 		if (target.MyTile != null)
 			DoEffect(origin, target.MyTile);
@@ -11,7 +14,7 @@ public class GravitationalEffect : GameEffect {
 
 	protected override void DoEffect (Interactive origin, Tile targetTile) {
 
-		List<Tile> neighbours = MapController.Instance.GetNeighbours(targetTile,_EffectRange);
+		List<Tile> neighbours = MapController.Instance.GetNeighbours(targetTile,_GravityRange);
 		//MapController.Instance.SortTilesByDistanceTo(neighbours, targetTile);
 
 		List<Tile> selectedTiles = new List<Tile>();

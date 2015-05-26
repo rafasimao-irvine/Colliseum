@@ -7,6 +7,9 @@ public class DashEffect : GameEffect {
 	[SerializeField]
 	protected float _DashSpeed;
 
+	[SerializeField]
+	protected int _DashRange;
+
 	protected override void DoEffect (Interactive origin, Interactive target) {
 		if (target.MyTile!=null)
 			DoEffect(origin,target.MyTile);
@@ -15,7 +18,7 @@ public class DashEffect : GameEffect {
 	protected override void DoEffect (Interactive origin, Tile targetTile) {
 		if (origin.MyTile != targetTile) {
 			Vector2 direction = MapController.Instance.GetDirection(origin.MyTile,targetTile);
-			List<Tile> line = MapController.Instance.GetLine(origin.MyTile, direction, _EffectRange);
+			List<Tile> line = MapController.Instance.GetLine(origin.MyTile, direction, _DashRange);
 
 			int selected = -2;
 			for (int i=0; i<line.Count; i++) {
