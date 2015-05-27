@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/**
+ * Spins the gameobject it is on an amount angles.
+ * */
 public class SpinEffect : GameEffect {
 
 	private bool _StartSpinning;

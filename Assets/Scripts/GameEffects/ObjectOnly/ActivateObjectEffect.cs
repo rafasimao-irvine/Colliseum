@@ -2,6 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 
+/**
+ * Attack the referenced ObjectCreator's created objects with a
+ * damage of 1.
+ * */
 public class ActivateObjectEffect : GameEffect {
 
 	[SerializeField]

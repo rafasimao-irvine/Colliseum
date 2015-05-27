@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/**
+ * Buffs the target(Characther), with a certain amount of StrBuff;
+ * */
 public class BuffEffect : GameEffect {
 
 	[SerializeField]

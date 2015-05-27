@@ -2,6 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 
+/**
+ * Pull all the characthers in the range area 1 tile 
+ * closer to the target tile.
+ * */
 public class GravitationalEffect : GameEffect {
 
 	[SerializeField]

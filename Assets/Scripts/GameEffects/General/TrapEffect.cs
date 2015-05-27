@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/**
+ * Traps the target(Characther), within a certain amount of Turns.
+ * */
 public class TrapEffect : GameEffect {
 
 	[SerializeField]

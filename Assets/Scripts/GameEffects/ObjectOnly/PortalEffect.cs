@@ -2,6 +2,13 @@
 using System.Collections;
 using System.Collections.Generic;
 
+/**
+ * OnAwake the effect creates a clone of the gameobject it is on,
+ * and places it at a random position in the map.
+ * When the effect is triggered i sends the target to the next tile, following the 
+ * given target->origin direction, of its clone. To make the transition it adds
+ * a PortalFeat to the target(Characther).
+ * */
 public class PortalEffect : GameEffect {
 
 	protected Interactive _Clone;

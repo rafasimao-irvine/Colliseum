@@ -4,9 +4,8 @@ using System.Collections.Generic;
 
 public abstract class GameEffect : MonoBehaviour {
 
-	[SerializeField]
-	protected VisualEffect _VisualEffect;
-
+	// AudioVisual Effects that come with the effect
+	public VisualEffect _VisualEffect;
 	public AudioClip SoundEffect;
 
 	// Tiles the Effect will occur On
@@ -14,9 +13,9 @@ public abstract class GameEffect : MonoBehaviour {
 		None, OriginNeighbours, Line, Target, TargetBlock
 	}
 	[SerializeField]
-	protected EffectTarget _EffectTarget;
+	private EffectTarget _EffectTarget;
 
-	// Effect Range, used to refer to the Effect Target
+	// Effect Range, used to refer to the Effect Target range
 	[SerializeField]
 	private int _EffectRange;
 

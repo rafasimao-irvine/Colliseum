@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/**
+ * Throws a Throwable with the given origin and target.
+ * */
 public class ThrowEffect : GameEffect {
 
 	[SerializeField]

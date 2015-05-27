@@ -2,11 +2,17 @@
 using System.Collections;
 using System.Collections.Generic;
 
+/**
+ * Adds a DashFeat to the origin (if it is a Characther) towards a
+ * target Tile in line without obstacles, using the targetTile as reference.
+ * */
 public class DashEffect : GameEffect {
 
+	// Characther Speed Modifier
 	[SerializeField]
 	protected float _DashSpeed;
 
+	// Number of tiles the Dash can tresspass
 	[SerializeField]
 	protected int _DashRange;
 

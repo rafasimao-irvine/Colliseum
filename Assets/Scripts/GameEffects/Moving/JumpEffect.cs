@@ -2,6 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 
+/**
+ * Adds a JumpFeat to the target or a previous tile in case 
+ * there is a obstacle in the way, respecting the throwing range.
+ * */
 public class JumpEffect : GameEffect {
 
 	[SerializeField]

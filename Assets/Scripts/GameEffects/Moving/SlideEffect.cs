@@ -1,6 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/**
+ * Adds a SlideFeat to the target(Characther) to a adjacent tile.
+ * It can be a predefined random direction, or can be generated on base 
+ * of the origin -> target direction. It can also be changed t go on the opposite
+ * direction by setting knockback flag to true.
+ * */
 public class SlideEffect : GameEffect {
 
 	[SerializeField]

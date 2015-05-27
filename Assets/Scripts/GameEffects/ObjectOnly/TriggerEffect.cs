@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/**
+ * Sends a message to a setted receiver to be triggered passing origin and target.
+ * */
 public class TriggerEffect : GameEffect {
 
 	[HideInInspector]

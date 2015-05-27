@@ -1,6 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/**
+ * Paralizes the target(Characther), with a certain amount of Turns.
+ * If it is destroyed the player is unparalized.
+ * */
 public class ParalizeEffect : GameEffect {
 
 	[SerializeField]

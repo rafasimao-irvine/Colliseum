@@ -1,6 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/**
+ * Attacks a target, with a certain amount of Damage, 
+ * passing the origin as the causer.
+ * */
 public class DamageEffect : GameEffect {
 
 	[SerializeField]

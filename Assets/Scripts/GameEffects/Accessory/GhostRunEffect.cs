@@ -2,6 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 
+/**
+ * Adds the GhostFeat to the origin(if it is a Characther), towards
+ * the direction pointed by the targetTile, rrespecting the GhostRange.
+ * The targetTile must be empty or be Enterable.
+ * */
 public class GhostRunEffect : GameEffect {
 
 	[SerializeField]

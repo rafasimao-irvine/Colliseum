@@ -1,6 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/**
+ * Instantiates the Interactive Prefab at the targetTile.
+ * PS: Does nothing if the the target is an Interactive.
+ * */
 public class CreatorEffect : GameEffect {
 
 	[SerializeField]

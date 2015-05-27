@@ -2,6 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 
+/**
+ * Instatiates a Interactive prefab at the front area given by the
+ * target->origin direction.
+ * */
 public class ObjectThrowerEffect : GameEffect {
 
 	[SerializeField]

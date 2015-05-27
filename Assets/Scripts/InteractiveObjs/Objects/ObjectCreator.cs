@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class ObjectCreator : MonoBehaviour {
 
 	enum CreationArea {
-		Neighbours, Line, Random
+		Neighbours, Line, Randomly
 	}
 
 	[SerializeField]
@@ -13,7 +13,7 @@ public class ObjectCreator : MonoBehaviour {
 	[SerializeField]
 	private CreationArea _CreationArea;
 	[SerializeField]
-	private int _AreaRange=1;
+	private int _AreaRange = 1;
 	private List<Interactive> _Objects;
 
 	[SerializeField]
@@ -29,7 +29,7 @@ public class ObjectCreator : MonoBehaviour {
 		case CreationArea.Line:
 			CreateLineObjects();
 			break;
-		case CreationArea.Random:
+		case CreationArea.Randomly:
 			CreateRandomObjects();
 			break;
 		}
