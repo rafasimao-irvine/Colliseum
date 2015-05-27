@@ -114,7 +114,7 @@ public class Enemy : Characther {
 	}
 
 	protected void AttackPersonage () {
-		if (IsAttackReady())
+		if (IsAttackReady() && TargetChar!=null)
 			Attack(TargetChar);
 	}
 	#endregion -------------------------------------------

@@ -9,7 +9,7 @@ public class Weapon {
 	public GameObject MyGameObject;
 
 	enum AttackArea {
-		Target, FrontArea, Block, Flower
+		Target, FrontArea, Block, Flower, Line
 	}
 
 	[SerializeField]
@@ -22,7 +22,7 @@ public class Weapon {
 	[SerializeField]
 	private AttackArea _AtkArea;
 	[SerializeField]
-	private int _AtkDamage, _AtkRange, _AtkDelay, _Durability;
+	private int _AtkDamage, _AtkReachRange, _AtkAreaRange, _AtkDelay, _Durability;
 	private int _DelayCounter;
 	#pragma warning restore 0649
 
@@ -45,13 +45,16 @@ public class Weapon {
 			PerformAttack(personage,target);
 			break;
 		case AttackArea.FrontArea:
-			AttackFrontArea(personage,target);
+			AttackFrontArea(personage,target.MyTile);
 			break;
 		case AttackArea.Block:
-			AttackBlock(personage,target);
+			AttackBlock(personage,target.MyTile);
 			break;
 		case AttackArea.Flower:
-			AttackFlower(personage,target);
+			AttackFlower(personage,target.MyTile);
+			break;
+		case AttackArea.Line:
+			AttackLine(personage,target.MyTile);
 			break;
 		}
 
@@ -59,26 +62,35 @@ public class Weapon {
 		_DelayCounter=0; //reboot cooldown
 	}
 
-	private void AttackFrontArea (Characther personage, Interactive target) {
+	private void AttackFrontArea (Characther personage, Tile targetTile) {
 		AttackTiles(
 			personage,
 			MapController.Instance.GetFrontArea(
 			personage.MyTile,
-			MapController.Instance.GetDirection(personage.MyTile, target.MyTile)));
+			MapController.Instance.GetDirection(personage.MyTile, targetTile) ));
 	}
 
-	private void AttackBlock (Characther personage, Interactive target) {
+	private void AttackBlock (Characther personage, Tile targetTile) {
 		AttackTiles(
 			personage,
-			MapController.Instance.GetBlock(target.MyTile));
+			MapController.Instance.GetBlock(targetTile) );
 	}
 
-	private void AttackFlower (Characther personage, Interactive target) {
+	private void AttackFlower (Characther personage, Tile targetTile) {
 		AttackTiles(
 			personage,
 			MapController.Instance.GetFlower(
-			target.MyTile,
-			MapController.Instance.GetDirection(personage.MyTile, target.MyTile)));
+			targetTile,
+			MapController.Instance.GetDirection(personage.MyTile, targetTile) ));
+	}
+
+	private void AttackLine (Characther personage, Tile targetTile) {
+		AttackTiles(
+			personage,
+			MapController.Instance.GetLine(
+			personage.MyTile,
+			MapController.Instance.GetDirection(personage.MyTile, targetTile),
+			_AtkAreaRange));
 	}
 
 	private void AttackTiles (Characther personage, List<Tile> tiles) {
@@ -94,7 +106,6 @@ public class Weapon {
 
 		if (_AtkEffect!=null)
 			_AtkEffect.MakeEffect(personage,target);
-
 	}
 
 	private void DecreaseDurability () {
@@ -103,7 +114,7 @@ public class Weapon {
 	}
 
 	public int GetWeaponAttackRange () {
-		return _AtkRange;
+		return _AtkReachRange;
 	}
 
 	public bool IsBroken () {
