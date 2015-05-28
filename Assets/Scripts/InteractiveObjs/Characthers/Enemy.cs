@@ -18,7 +18,7 @@ public class Enemy : Characther {
 	// AI's
 	protected enum EnemyAIAction {
 		None, MoveRandom, FollowPersonage, AttackPersonage, 
-		RunFromPersonage, MoveRandAndAttackRandTile
+		RunFromPersonage, RunAttackRand, MoveRandAttackRand
 	}
 	[SerializeField]
 	protected EnemyAIAction _NoPersonageAction, _SawPersonageAction, _PersonageInRangeAction;
@@ -94,7 +94,10 @@ public class Enemy : Characther {
 		case EnemyAIAction.RunFromPersonage:
 			RunFromPersonage();
 			break;
-		case EnemyAIAction.MoveRandAndAttackRandTile:
+		case EnemyAIAction.RunAttackRand:
+			RunFromPersonageAndAttackRandTile();
+			break;
+		case EnemyAIAction.MoveRandAttackRand:
 			MoveRandAndAttackRandTile();
 			break;
 		}
@@ -135,11 +138,6 @@ public class Enemy : Characther {
 		return false;
 	}
 
-	protected void MoveRandAndAttackRandTile () {
-		if (!AttackRandomTile())
-			MoveRandom();
-	}
-
 	protected void RunFromPersonage () {
 		MapController map = MapController.Instance;
 		Tile next = map.GetNextTile(MyTile, map.GetDirection(TargetChar.MyTile, MyTile));
@@ -148,6 +146,17 @@ public class Enemy : Characther {
 		else 
 			MoveRandom();
 	}
+
+	protected void RunFromPersonageAndAttackRandTile() {
+		if (!AttackRandomTile())
+			RunFromPersonage();
+	}
+
+	protected void MoveRandAndAttackRandTile () {
+		if (!AttackRandomTile())
+			MoveRandom();
+	}
+
 	#endregion -------------------------------------------
 
 	#region Explode Upon Death Effect --------------------
