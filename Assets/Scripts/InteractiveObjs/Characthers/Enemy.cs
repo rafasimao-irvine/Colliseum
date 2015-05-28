@@ -17,7 +17,8 @@ public class Enemy : Characther {
 
 	// AI's
 	protected enum EnemyAIAction {
-		None, MoveRandom, FollowPersonage, AttackPersonage
+		None, MoveRandom, FollowPersonage, AttackPersonage, 
+		RunFromPersonage, MoveRandAndAttackRandTile
 	}
 	[SerializeField]
 	protected EnemyAIAction _NoPersonageAction, _SawPersonageAction, _PersonageInRangeAction;
@@ -90,6 +91,12 @@ public class Enemy : Characther {
 		case EnemyAIAction.AttackPersonage:
 			AttackPersonage();
 			break;
+		case EnemyAIAction.RunFromPersonage:
+			RunFromPersonage();
+			break;
+		case EnemyAIAction.MoveRandAndAttackRandTile:
+			MoveRandAndAttackRandTile();
+			break;
 		}
 	}
 	#endregion
@@ -116,6 +123,30 @@ public class Enemy : Characther {
 	protected void AttackPersonage () {
 		if (IsAttackReady() && TargetChar!=null)
 			Attack(TargetChar);
+	}
+
+	protected bool AttackRandomTile () {
+		if (IsAttackReady()) {
+			List<Tile> neighbours = MapController.Instance.GetNeighbours(MyTile);
+			Attack(neighbours[Random.Range(0,neighbours.Count)]);
+
+			return true;
+		}
+		return false;
+	}
+
+	protected void MoveRandAndAttackRandTile () {
+		if (!AttackRandomTile())
+			MoveRandom();
+	}
+
+	protected void RunFromPersonage () {
+		MapController map = MapController.Instance;
+		Tile next = map.GetNextTile(MyTile, map.GetDirection(TargetChar.MyTile, MyTile));
+		if (next!=null && (next.OnTop==null || (next.OnTop!=null && !next.OnTop.Blockable)) )
+			AddMoveTo(next);
+		else 
+			MoveRandom();
 	}
 	#endregion -------------------------------------------
 
