@@ -30,6 +30,17 @@ public class CharactherWeapons {
 		if (IsAnyFirstWeaponEquipped())
 			_FirstWeapon.Attack(user,target);
 	
+		VerifyIfIsBroken();
+	}
+
+	public void Attack (Characther user, Tile targetTile) {
+		if (IsAnyFirstWeaponEquipped())
+			_FirstWeapon.Attack(user,targetTile);
+		
+		VerifyIfIsBroken();
+	}
+
+	private void VerifyIfIsBroken () {
 		if (_FirstWeapon.IsBroken()) {
 			_FirstWeapon.BeDestroyed();
 			_FirstWeapon = null;

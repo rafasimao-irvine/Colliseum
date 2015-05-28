@@ -32,36 +32,46 @@ public class Weapon {
 	}
 
 	public void Attack (Characther personage, Interactive target) {
+		Attack(personage,target.MyTile);
+	}
+
+	public void Attack (Characther personage, Tile targetTile) {
 		if (IsBroken() || !IsReady())
 			return;
-
-		if (target.Interactable) {
-			target.BeAttacked(personage,1);
+		
+		if (targetTile.OnTop!=null && targetTile.OnTop.Interactable) {
+			targetTile.OnTop.BeAttacked(personage,1);
 			return;
 		}
-
+		
 		switch (_AtkArea) {
 		case AttackArea.Target:
-			PerformAttack(personage,target);
+			PerformAttack(personage,targetTile);
 			break;
 		case AttackArea.FrontArea:
-			AttackFrontArea(personage,target.MyTile);
+			AttackFrontArea(personage,targetTile);
 			break;
 		case AttackArea.Block:
-			AttackBlock(personage,target.MyTile);
+			AttackBlock(personage,targetTile);
 			break;
 		case AttackArea.Flower:
-			AttackFlower(personage,target.MyTile);
+			AttackFlower(personage,targetTile);
 			break;
 		case AttackArea.Line:
-			AttackLine(personage,target.MyTile);
+			AttackLine(personage,targetTile);
 			break;
 		}
-
+		
 		DecreaseDurability();
 		_DelayCounter=0; //reboot cooldown
 	}
 
+	private void DecreaseDurability () {
+		if (!_Permanent && _Durability>0)
+			_Durability--;
+	}
+
+	#region Area Attacks
 	private void AttackFrontArea (Characther personage, Tile targetTile) {
 		AttackTiles(
 			personage,
@@ -94,10 +104,15 @@ public class Weapon {
 	}
 
 	private void AttackTiles (Characther personage, List<Tile> tiles) {
-		for (int i=0; i<tiles.Count; i++) {
-			if(tiles[i].OnTop != null && tiles[i] != personage.MyTile)
-				PerformAttack(personage, tiles[i].OnTop);
-		}
+		for (int i=0; i<tiles.Count; i++)
+			PerformAttack(personage, tiles[i]);
+	}
+	#endregion
+
+	#region Performe Attacks
+	private void PerformAttack (Characther personage, Tile targetTile) {
+		if (targetTile.OnTop!=null && targetTile!=personage.MyTile)
+			PerformAttack(personage, targetTile.OnTop);
 	}
 
 	private void PerformAttack (Characther personage, Interactive target) {
@@ -107,12 +122,9 @@ public class Weapon {
 		if (_AtkEffect!=null)
 			_AtkEffect.MakeEffect(personage,target);
 	}
+	#endregion
 
-	private void DecreaseDurability () {
-		if (!_Permanent && _Durability>0)
-			_Durability--;
-	}
-
+	#region Getters
 	public int GetWeaponAttackRange () {
 		return _AtkReachRange;
 	}
@@ -128,5 +140,6 @@ public class Weapon {
 	public void BeDestroyed () {
 		MyGameObject.GetComponent<Interactive>().BeDestroyed();
 	}
+	#endregion
 
 }

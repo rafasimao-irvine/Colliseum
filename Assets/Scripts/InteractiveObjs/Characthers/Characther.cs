@@ -107,8 +107,7 @@ public abstract class Characther : Attackable {
 
 	// Attacking ---------------------------------------
 	protected void Attack (Interactive target) {
-		_CharMovement.LookAtDirection(target.transform.position - transform.position);
-		GetComponent<Animation>().Play("Attack");
+		PlayAttackAnim(target.transform.position);
 
 		if (_CharWeapons.IsAnyFirstWeaponEquipped() && !target.Interactable)
 			_CharWeapons.Attack(this, target);
@@ -116,9 +115,26 @@ public abstract class Characther : Attackable {
 			target.BeAttacked(this, GetCharAtkDamage(target));
 
 		_CharAccessories.OnAttack(this, target);
-
 	}
-	
+
+	protected void Attack (Tile targetTile) {
+		if (targetTile.OnTop != null)
+			Attack(targetTile.OnTop);
+
+		else if (_CharWeapons.IsAnyFirstWeaponEquipped()) {
+			PlayAttackAnim(targetTile.transform.position);
+
+			_CharWeapons.Attack(this, targetTile);
+
+			_CharAccessories.OnAttack(this, targetTile.OnTop);
+		}
+	}
+
+	private void PlayAttackAnim (Vector3 targetPos) {
+		_CharMovement.LookAtDirection(targetPos - transform.position);
+		GetComponent<Animation>().Play("Attack");
+	}
+
 	// Overrides ---------------------------------------
 	//Be hitted by something
 	public override void BeAttacked (Interactive iObj, int damage) {
