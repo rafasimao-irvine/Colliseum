@@ -12,7 +12,7 @@ public class AccessoryEffect : GameEffect {
 	}
 	
 	protected override void DoEffect (Interactive origin, Interactive target) {
-		if (target is Characther) {
+		if (target is Personage) {
 			Accessory a = ((Characther)target).TryToEquip(_Accessory);
 			if (a!=_Accessory) {
 				origin.MyTile.TryGetOut(origin);

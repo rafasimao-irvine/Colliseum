@@ -12,7 +12,7 @@ public class WeaponEffect : GameEffect {
 	}
 
 	protected override void DoEffect (Interactive origin, Interactive target) {
-		if (target is Characther) {
+		if (target is Personage) {
 			Weapon w = ((Characther)target).TryToEquip(_Weapon);
 			if (w!=_Weapon) {
 				origin.MyTile.TryGetOut(origin);
