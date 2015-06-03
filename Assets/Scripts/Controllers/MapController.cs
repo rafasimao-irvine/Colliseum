@@ -113,7 +113,8 @@ public class MapController : MonoBehaviour {
 
 			foreach (Tile neighbour in GetNeighbours(current,1)) {
 				// Go to next neighbour
-				if((neighbour.OnTop!=null && neighbour.OnTop.Blockable) || closed.Contains(neighbour))
+				if ( (neighbour.OnTop!=null && (neighbour.OnTop.Blockable || neighbour.OnTop.Unpathable)) || 
+				    closed.Contains(neighbour) )
 					continue;
 
 				// If the new GCost is less than a previous one or neighbour is not in the open list

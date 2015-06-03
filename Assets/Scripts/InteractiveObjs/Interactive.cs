@@ -9,6 +9,8 @@ public abstract class Interactive : MonoBehaviour {
 	public bool Attackable { get; protected set; }
 	public bool Interactable { get; protected set; }
 
+	public bool Unpathable;
+
 	// Get the tile that is below the interactive object and set it as it's tile
 	public void RefreshMyTile () {
 		RaycastHit hit;
