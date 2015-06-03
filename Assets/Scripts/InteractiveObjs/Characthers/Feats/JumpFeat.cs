@@ -32,8 +32,11 @@ public class JumpFeat : IFeat {
 		if (_Started && IsDone()) {
 			_Started = false;
 			// Enter
-			if (_TileTarget.TryGetIn(_Characther))
+			if (_TileTarget.TryGetIn(_Characther)) {
+				if (_Characther.IsDead()) 
+					_TileTarget.TryGetOut(_Characther);
 				_Characther.SetMyTile(_TileTarget);
+			}
 			else // Just in case:
 				_CharactherMovement.AddMoveTo(_Characther.MyTile);
 		}
