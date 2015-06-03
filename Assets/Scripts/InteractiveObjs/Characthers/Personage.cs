@@ -151,6 +151,7 @@ public class Personage : Characther {
 
 		// Otherwise, move
 		AddMoveTo(path[0]);
+		ActivateMoveFowardAtk(MapController.Instance.GetDirection(MyTile,path[0]));
 		if(path[0]==target) InterruptActions();
 
 		return true; // Return that an action occurred

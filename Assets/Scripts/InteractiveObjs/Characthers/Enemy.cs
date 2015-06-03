@@ -119,8 +119,10 @@ public class Enemy : Characther {
 		List<Tile> path = MapController.Instance.FindPath(MyTile, TargetChar.MyTile);
 		
 		// Start the movement
-		if (path != null && path.Count > 0)
+		if (path != null && path.Count > 0) {
 			AddMoveTo(path[0]);
+			ActivateMoveFowardAtk(MapController.Instance.GetDirection(MyTile,path[0]));
+		}
 	}
 
 	protected void AttackPersonage () {

@@ -18,6 +18,11 @@ public abstract class Characther : Attackable {
 	// Movement 
 	protected CharactherMovement _CharMovement;
 
+	// Move Foward Attack
+	protected bool _MoveFowardAtk = false;
+	protected Vector2 _MoveFowardAtkDirection;
+
+	// Main Char HUD
 	public CharHUD _CharHUD;
 
 	// Itens
@@ -57,8 +62,25 @@ public abstract class Characther : Attackable {
 	 */
 	protected virtual void Update () {
 		// If not dead, performs usual actions
-		if (!IsDead())
+		if (!IsDead()) {
 			_CharMovement.UpdateCharactherMovement();
+			CheckMoveFowardAtk();
+		}
+	}
+
+	protected void CheckMoveFowardAtk () {
+		if (_MoveFowardAtk && !_CharMovement.IsInAction()) {
+			Tile t = MapController.Instance.GetNextTile(MyTile,_MoveFowardAtkDirection);
+
+			if (t!=null && t.OnTop!=null &&
+			    t.OnTop.GetBeAttackedTarget() is Characther &&
+			    !(this is Enemy && t.OnTop.GetBeAttackedTarget() is Enemy))
+				Attack(t.OnTop);
+
+			_MoveFowardAtk = false;
+
+			UpdateComponents();
+		}
 	}
 
 	/**
@@ -76,13 +98,16 @@ public abstract class Characther : Attackable {
 			result = MakeTurnAction();
 
 		// Update components
-		if (result) {
-			_CharStatus.UpdateStatus();
-			_CharWeapons.UpdateWeapons();
-			_CharAccessories.UpdateAccessories();
-		}
+		if (result && !_MoveFowardAtk)
+			UpdateComponents();
 
 		return result; // Return if made action
+	}
+
+	protected void UpdateComponents () {
+		_CharStatus.UpdateStatus();
+		_CharWeapons.UpdateWeapons();
+		_CharAccessories.UpdateAccessories();
 	}
 
 	abstract protected bool MakeTurnAction ();
@@ -91,6 +116,13 @@ public abstract class Characther : Attackable {
 	protected void AddMoveTo (Tile tile) {
 		if (!_CharStatus.IsParalized())
 			_CharMovement.AddMoveTo(tile);
+	}
+
+	protected void ActivateMoveFowardAtk (Vector2 dir) {
+		if (_CharMovement.IsMoving()) {
+			_MoveFowardAtk = true;
+			_MoveFowardAtkDirection = dir;
+		}
 	}
 
 	public void AddMovementFeat (IFeat feat) {
@@ -102,7 +134,7 @@ public abstract class Characther : Attackable {
 	}
 
 	public bool IsInAction () {
-		return _CharMovement.IsInAction();
+		return (_CharMovement.IsInAction() || (_MoveFowardAtk && !IsDead()));
 	}
 
 	// Attacking ---------------------------------------
