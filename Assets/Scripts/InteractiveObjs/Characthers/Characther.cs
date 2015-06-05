@@ -70,12 +70,15 @@ public abstract class Characther : Attackable {
 
 	protected void CheckMoveFowardAtk () {
 		if (_MoveFowardAtk && !_CharMovement.IsInAction()) {
-			Tile t = MapController.Instance.GetNextTile(MyTile,_MoveFowardAtkDirection);
 
-			if (t!=null && t.OnTop!=null &&
-			    t.OnTop.GetBeAttackedTarget() is Characther &&
-			    !(this is Enemy && t.OnTop.GetBeAttackedTarget() is Enemy))
-				Attack(t.OnTop);
+			if (!IsDead() && !_CharStatus.IsTrapped()) {
+				Tile t = MapController.Instance.GetNextTile(MyTile,_MoveFowardAtkDirection);
+
+				if (t!=null && t.OnTop!=null &&
+				    t.OnTop.GetBeAttackedTarget() is Characther &&
+				    !(this is Enemy && t.OnTop.GetBeAttackedTarget() is Enemy))
+					Attack(t.OnTop);
+			}
 
 			_MoveFowardAtk = false;
 
