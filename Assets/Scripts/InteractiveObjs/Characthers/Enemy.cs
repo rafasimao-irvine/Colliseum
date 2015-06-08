@@ -142,7 +142,8 @@ public class Enemy : Characther {
 	}
 
 	protected void Move (Tile target) {
-		if (target.OnTop == null || (target.OnTop != null && !target.OnTop.Blockable))
+		if (target.OnTop == null || 
+		    (target.OnTop != null && !target.OnTop.Blockable && !target.OnTop.Unpathable))
 			AddMoveTo(target);
 	}
 
