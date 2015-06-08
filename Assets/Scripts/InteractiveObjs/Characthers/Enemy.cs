@@ -271,4 +271,11 @@ public class Enemy : Characther {
 		BeSaw(TargetChar);
 	}
 
+	public bool SawTarget () {
+		return _SawPersonage;
+	}
+
+	public int GetVisionRange () {
+		return _VisionRange;
+	}
 }

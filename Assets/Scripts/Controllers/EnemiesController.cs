@@ -42,10 +42,12 @@ public class EnemiesController : TurnController {
 	}
 	
 	private IEnumerator MakeEnemiesAIActions() {
-		foreach(Enemy e in _Enemies)
+		foreach (Enemy e in _Enemies)
 			e.PrepareTurnAction();
 
-		foreach(Enemy e in _Enemies) {
+		ChainEnemiesSeeTarget();
+
+		foreach (Enemy e in _Enemies) {
 			while (!e.MakeAction())
 				yield return new WaitForSeconds(0.1f);
 
@@ -56,6 +58,27 @@ public class EnemiesController : TurnController {
 		}
 
 		_MadeAction = true;
+	}
+
+	private void ChainEnemiesSeeTarget () {
+		List<Enemy> eWhoSaw = new List<Enemy>();
+		foreach (Enemy e in _Enemies) {
+			if (e.PreparedAction.Type == Enemy.ActionType.SeeTarget &&
+			    e.TargetChar == PlayerController.PlayerPersonage)
+				eWhoSaw.Add(e);
+		}
+
+		MapController map = MapController.Instance;
+
+		foreach (Enemy eSaw in eWhoSaw) {
+			foreach (Enemy e in _Enemies) {
+				if (e.PreparedAction.Type != Enemy.ActionType.SeeTarget && 
+				    !e.SawTarget() && 
+				    eSaw.TargetChar == e.TargetChar && 
+				    map.GetDistance(eSaw.MyTile, e.MyTile) <= eSaw.GetVisionRange())
+					e.RevealTargetCharacther();
+			}
+		}
 	}
 
 	/**
