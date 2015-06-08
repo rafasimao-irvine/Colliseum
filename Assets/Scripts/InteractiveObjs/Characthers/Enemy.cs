@@ -15,13 +15,21 @@ public class Enemy : Characther {
 	[SerializeField]
 	protected WeaponEffect _InitialWeapon;
 
+	// Prepared Action
+	public enum ActionType {None, Move, MoveWithAttack, Attack, SeeTarget}
+	public struct Action {
+		public ActionType Type;
+		public Tile Target;
+	}
+	public Action PreparedAction;
+
 	// AI's
-	protected enum EnemyAIAction {
+	protected enum AIAction {
 		None, MoveRandom, FollowPersonage, AttackPersonage, 
 		RunFromPersonage, RunAttackRand, MoveRandAttackRand
 	}
 	[SerializeField]
-	protected EnemyAIAction _NoPersonageAction, _SawPersonageAction, _PersonageInRangeAction;
+	protected AIAction _NoPersonageAction, _SawPersonageAction, _PersonageInRangeAction;
 
 	// Boomer
 	[SerializeField]
@@ -39,11 +47,43 @@ public class Enemy : Characther {
 	}
 
 	#region Enemy Actions --------------------------------------
+
+	public void PrepareTurnAction () {
+		MapController mapController = MapController.Instance;
+		if (IsDead() || _CharStatus.IsTrapped())
+			SetPreparedAction(ActionType.None); // Do nothing
+
+		// If it is close to the target personage, perceive it!
+		else if (!_SawPersonage &&
+		    mapController.GetNeighbours(MyTile,GetVisonRange()).Contains(TargetChar.MyTile))
+			SetPreparedAction(ActionType.SeeTarget);
+		
+		// If it haven't seen the player yet
+		else if (!_SawPersonage || TargetChar.IsDead())
+			AIPrepareAction(_NoPersonageAction);
+		
+		// If it is close to the target personage, attack!
+		else if (mapController.GetNeighbours(MyTile,GetCurrentAttackRange()).Contains(TargetChar.MyTile))
+			AIPrepareAction(_PersonageInRangeAction);
+		
+		// Otherwise move towards it
+		else
+			AIPrepareAction(_SawPersonageAction);
+	}
+
+	protected void SetPreparedAction (ActionType type, Tile target = null) {
+		PreparedAction.Type = type;
+		PreparedAction.Target = target;
+	}
+
 	/**
 	 * The enemy makes its AI action.
 	 * Returns 0 to say it ended well, otherwise returns > 0.
 	 */
 	protected override bool MakeTurnAction () {
+		PerformAction(PreparedAction);
+		return true;
+		/*
 		MapController mapController = MapController.Instance;
 		// If it is close to the target personage, perceive it!
 		if (!_SawPersonage && 
@@ -71,33 +111,72 @@ public class Enemy : Characther {
 		PerformAction(_SawPersonageAction);
 
 		return true;
+		*/
 	}
+
+	protected void PerformAction (Action action) {
+		switch (action.Type) {
+		case ActionType.None:
+			break;
+		case ActionType.SeeTarget:
+			SeeTarget();
+			break;
+		case ActionType.Move:
+			Move(action.Target);
+			break;
+		case ActionType.MoveWithAttack:
+			MoveWithAttack(action.Target);
+			break;
+		case ActionType.Attack:
+			if (IsAttackReady())
+				Attack(action.Target);
+			break;
+		}
+	}
+
+	protected void SeeTarget () {
+		_SawPersonage = true;
+		TargetChar.BeSaw(this);
+		BeSaw(TargetChar);
+		Logger.strLog += gameObject.name.Substring(0,gameObject.name.Length-7)+" saw you!\n";
+	}
+
+	protected void Move (Tile target) {
+		if (target.OnTop == null || (target.OnTop != null && !target.OnTop.Blockable))
+			AddMoveTo(target);
+	}
+
+	protected void MoveWithAttack (Tile target) {
+		Move(target);
+		ActivateMoveFowardAtk(MapController.Instance.GetDirection(MyTile,target));
+	}
+
 
 	protected int GetVisonRange () {
 		int result = _VisionRange + TargetChar.UseEnemyVisionModifier();
 		return (result<1) ? 1 : result;
 	}
 
-	protected void PerformAction (EnemyAIAction action) {
+	protected void AIPrepareAction (AIAction action) {
 		switch (action) {
-		case EnemyAIAction.None:
+		case AIAction.None:
 			break;
-		case EnemyAIAction.MoveRandom:
+		case AIAction.MoveRandom:
 			MoveRandom();
 			break;
-		case EnemyAIAction.FollowPersonage:
+		case AIAction.FollowPersonage:
 			FollowPersonage();
 			break;
-		case EnemyAIAction.AttackPersonage:
+		case AIAction.AttackPersonage:
 			AttackPersonage();
 			break;
-		case EnemyAIAction.RunFromPersonage:
+		case AIAction.RunFromPersonage:
 			RunFromPersonage();
 			break;
-		case EnemyAIAction.RunAttackRand:
+		case AIAction.RunAttackRand:
 			RunFromPersonageAndAttackRandTile();
 			break;
-		case EnemyAIAction.MoveRandAttackRand:
+		case AIAction.MoveRandAttackRand:
 			MoveRandAndAttackRandTile();
 			break;
 		}
@@ -110,8 +189,9 @@ public class Enemy : Characther {
 
 		if (tiles.Count > 0) {
 			Tile tile = tiles[Random.Range(0,tiles.Count)];
-			if (tile.OnTop == null || (tile.OnTop != null && !tile.OnTop.Blockable))
-				AddMoveTo(tile);
+			//if (tile.OnTop == null || (tile.OnTop != null && !tile.OnTop.Blockable))
+			//	AddMoveTo(tile);
+			SetPreparedAction(ActionType.Move, tile);
 		}
 	}
 
@@ -120,20 +200,23 @@ public class Enemy : Characther {
 		
 		// Start the movement
 		if (path != null && path.Count > 0) {
-			AddMoveTo(path[0]);
-			ActivateMoveFowardAtk(MapController.Instance.GetDirection(MyTile,path[0]));
+			//AddMoveTo(path[0]);
+			//ActivateMoveFowardAtk(MapController.Instance.GetDirection(MyTile,path[0]));
+			SetPreparedAction(ActionType.MoveWithAttack, path[0]);
 		}
 	}
 
 	protected void AttackPersonage () {
 		if (IsAttackReady() && TargetChar!=null)
-			Attack(TargetChar);
+			//Attack(TargetChar);
+			SetPreparedAction(ActionType.Attack, TargetChar.MyTile);
 	}
 
 	protected bool AttackRandomTile () {
 		if (IsAttackReady()) {
 			List<Tile> neighbours = MapController.Instance.GetNeighbours(MyTile);
-			Attack(neighbours[Random.Range(0,neighbours.Count)]);
+			//Attack(neighbours[Random.Range(0,neighbours.Count)]);
+			SetPreparedAction(ActionType.Attack, neighbours[Random.Range(0,neighbours.Count)]);
 
 			return true;
 		}
@@ -144,7 +227,8 @@ public class Enemy : Characther {
 		MapController map = MapController.Instance;
 		Tile next = map.GetNextTile(MyTile, map.GetDirection(TargetChar.MyTile, MyTile));
 		if (next!=null && (next.OnTop==null || (next.OnTop!=null && !next.OnTop.Blockable)) )
-			AddMoveTo(next);
+			//AddMoveTo(next);
+			SetPreparedAction(ActionType.Move, next);
 		else 
 			MoveRandom();
 	}
@@ -186,4 +270,5 @@ public class Enemy : Characther {
 		_SawPersonage = true;
 		BeSaw(TargetChar);
 	}
+
 }

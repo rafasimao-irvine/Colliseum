@@ -42,14 +42,19 @@ public class EnemiesController : TurnController {
 	}
 	
 	private IEnumerator MakeEnemiesAIActions() {
+		foreach(Enemy e in _Enemies)
+			e.PrepareTurnAction();
+
 		foreach(Enemy e in _Enemies) {
 			while (!e.MakeAction())
 				yield return new WaitForSeconds(0.1f);
-			//e.MakeAction();
+
 			while (e.IsInAction()) // Makes it iterate one by one
 				yield return new WaitForSeconds(0.1f);
+
 			yield return null;
 		}
+
 		_MadeAction = true;
 	}
 
