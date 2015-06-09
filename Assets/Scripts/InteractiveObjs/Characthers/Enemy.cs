@@ -50,6 +50,8 @@ public class Enemy : Characther {
 
 	public void PrepareTurnAction () {
 		MapController mapController = MapController.Instance;
+		SetPreparedAction(ActionType.None);
+
 		if (IsDead() || _CharStatus.IsTrapped())
 			SetPreparedAction(ActionType.None); // Do nothing
 
