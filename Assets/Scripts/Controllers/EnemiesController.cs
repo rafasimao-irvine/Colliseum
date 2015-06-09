@@ -47,14 +47,16 @@ public class EnemiesController : TurnController {
 
 		ChainEnemiesSeeTarget();
 
+		CheckEnemiesMoves();
+
 		foreach (Enemy e in _Enemies) {
 			while (!e.MakeAction())
 				yield return new WaitForSeconds(0.1f);
+		}
 
+		foreach (Enemy e in _Enemies) {
 			while (e.IsInAction()) // Makes it iterate one by one
 				yield return new WaitForSeconds(0.1f);
-
-			yield return null;
 		}
 
 		_MadeAction = true;
@@ -76,7 +78,20 @@ public class EnemiesController : TurnController {
 				    !e.SawTarget() && 
 				    eSaw.TargetChar == e.TargetChar && 
 				    map.GetDistance(eSaw.MyTile, e.MyTile) <= eSaw.GetVisionRange())
-					e.RevealTargetCharacther();
+					e.SetPreparedAction(Enemy.ActionType.SeeTarget);
+			}
+		}
+	}
+
+	private void CheckEnemiesMoves () {
+		List<Tile> placed = new List<Tile>();
+		foreach (Enemy e in _Enemies) {
+			if (e.PreparedAction.Type == Enemy.ActionType.Move || 
+			    e.PreparedAction.Type == Enemy.ActionType.MoveWithAttack) {
+				if (!placed.Contains(e.PreparedAction.Target))
+					placed.Add (e.PreparedAction.Target);
+				else
+					e.SetPreparedAction(Enemy.ActionType.None);
 			}
 		}
 	}

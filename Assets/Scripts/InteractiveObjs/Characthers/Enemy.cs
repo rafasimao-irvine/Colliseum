@@ -71,7 +71,7 @@ public class Enemy : Characther {
 			AIPrepareAction(_SawPersonageAction);
 	}
 
-	protected void SetPreparedAction (ActionType type, Tile target = null) {
+	public void SetPreparedAction (ActionType type, Tile target = null) {
 		PreparedAction.Type = type;
 		PreparedAction.Target = target;
 	}
