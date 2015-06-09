@@ -40,20 +40,28 @@ public class EnemiesController : TurnController {
 				_MadeAction = _IsMyTurn=false;
 		}
 	}
-	
+
+	/**
+	 * Go through all the enemies prepare their actions and
+	 * performs collective enemies arrangements.
+	 * */
 	private IEnumerator MakeEnemiesAIActions() {
+		// Prepare enemies
 		foreach (Enemy e in _Enemies)
 			e.PrepareTurnAction();
 
+		// Group Vision
 		ChainEnemiesSeeTarget();
-
+		// Group Movements
 		CheckEnemiesMoves();
 
+		// Make actions
 		foreach (Enemy e in _Enemies) {
 			while (!e.MakeAction())
 				yield return new WaitForSeconds(0.1f);
 		}
 
+		// Verify end of actions
 		foreach (Enemy e in _Enemies) {
 			while (e.IsInAction()) // Makes it iterate one by one
 				yield return new WaitForSeconds(0.1f);
@@ -62,6 +70,7 @@ public class EnemiesController : TurnController {
 		_MadeAction = true;
 	}
 
+	// Chains the target revealing vision to the near enemies
 	private void ChainEnemiesSeeTarget () {
 		List<Enemy> eWhoSaw = new List<Enemy>();
 		foreach (Enemy e in _Enemies) {
@@ -83,6 +92,7 @@ public class EnemiesController : TurnController {
 		}
 	}
 
+	// Checks if the enemies moves dont tresspass one another
 	private void CheckEnemiesMoves () {
 		List<Tile> placed = new List<Tile>();
 		foreach (Enemy e in _Enemies) {
