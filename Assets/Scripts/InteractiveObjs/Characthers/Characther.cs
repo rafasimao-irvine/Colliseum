@@ -273,6 +273,10 @@ public abstract class Characther : Attackable {
 		_CharStatus.BeBuffered(strBuff);
 	}
 
+	public void BeBlinded (int turns) {
+		_CharStatus.BeBlinded(turns);
+	}
+
 	public void BeParallized (int turns) {
 		_CharStatus.BeParalized(turns);
 	} 
@@ -291,6 +295,10 @@ public abstract class Characther : Attackable {
 	
 	public bool IsBuffered () {
 		return _CharStatus.IsBuffered();
+	}
+
+	public bool IsBlinded () {
+		return _CharStatus.IsBlinded();
 	}
 
 	// BeSaw by another char

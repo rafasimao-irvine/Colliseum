@@ -137,10 +137,12 @@ public class Enemy : Characther {
 	}
 
 	protected void SeeTarget () {
-		_SawPersonage = true;
-		TargetChar.BeSaw(this);
-		BeSaw(TargetChar);
-		Logger.strLog += gameObject.name.Substring(0,gameObject.name.Length-7)+" saw you!\n";
+		if (!_CharStatus.IsBlinded()) {
+			_SawPersonage = true;
+			TargetChar.BeSaw(this);
+			BeSaw(TargetChar);
+			Logger.strLog += gameObject.name.Substring(0,gameObject.name.Length-7)+" saw you!\n";
+		}
 	}
 
 	protected void Move (Tile target) {
@@ -270,8 +272,14 @@ public class Enemy : Characther {
 	#endregion --------------------------------------------
 
 	public void RevealTargetCharacther () {
-		_SawPersonage = true;
-		BeSaw(TargetChar);
+		if (!_CharStatus.IsBlinded()) {
+			_SawPersonage = true;
+			BeSaw(TargetChar);
+		}
+	}
+
+	public void ForgetTargetCharacther () {
+		_SawPersonage = false;
 	}
 
 	public bool SawTarget () {

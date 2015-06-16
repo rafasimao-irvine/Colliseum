@@ -6,6 +6,7 @@ public class CharactherStatus {
 	// Status
 	protected int _TrappedTurns = 0;
 	protected int _ParalizedTurns = 0;
+	protected int _BlindedTurns = 0;
 	
 	protected bool _IsBuffed = false;
 	//protected int _BuffTurns = 0;
@@ -17,6 +18,7 @@ public class CharactherStatus {
 	public void UpdateStatus () {
 		if (_TrappedTurns>0) _TrappedTurns--;
 		if (_ParalizedTurns>0) _ParalizedTurns--;
+		if (_BlindedTurns>0) _BlindedTurns--;
 	}
 
 	public bool IsTrapped () {
@@ -25,6 +27,10 @@ public class CharactherStatus {
 
 	public bool IsParalized () {
 		return (_ParalizedTurns > 0);
+	}
+
+	public bool IsBlinded() {
+		return (_BlindedTurns > 0);
 	}
 
 	public bool IsBuffered () {
@@ -64,6 +70,11 @@ public class CharactherStatus {
 	public void BeParalized (int turns) {
 		_ParalizedTurns = turns;
 		Logger.strLog += "\n"+GetType()+" ficou paralizado por "+turns+" turnos.";
+	}
+
+	public void BeBlinded (int turns) {
+		_BlindedTurns = turns;
+		Logger.strLog += "\n"+GetType()+" ficou cego por "+turns+" turnos.";
 	}
 	#endregion
 }
