@@ -18,16 +18,12 @@ public class Accessory {
 	private int _Durability;
 
 	// Modifiers
-	public enum ModifierType {
-		Strength, Range, EnemyVision
-	}
+	public enum ModifierType {Strength, Range, EnemyVision}
 	[SerializeField]
 	private int _StrengthModifier, _RangeModifier, _EnemyVisionModifier;
 
 	// Counters
-	public enum CounterType {
-		BeAttacked, BeSaw, Attacked
-	}
+	public enum CounterType {BeAttacked, BeSaw, Attacked}
 	[SerializeField]
 	private GameEffect _BeAttackedEffect, _BeSawEffect, _AttackedEffect;
 
@@ -92,35 +88,21 @@ public class Accessory {
 	public void MakeCounterAction (Interactive origin, Interactive target, CounterType type) {
 		switch (type) {
 		case CounterType.BeAttacked:
-			BeAttacked(origin,target);
+			CounterAction(_BeAttackedEffect, origin, target);
 			break;
 		case CounterType.BeSaw:
-			BeSaw(origin,target);
+			CounterAction(_BeSawEffect, origin, target);
 			break;
 		case CounterType.Attacked:
-			Attacked(origin,target);
+			CounterAction(_AttackedEffect, origin, target);
 			break;
 		}
 	}
 
-	public void BeAttacked (Interactive origin, Interactive target) {
-		if (_BeAttackedEffect!=null) {
+	private void CounterAction (GameEffect effect, Interactive origin, Interactive target) {
+		if (effect!=null) {
 			if (MadeAction())
-				_BeAttackedEffect.MakeEffect(origin,target);
-		}
-	}
-
-	public void BeSaw (Interactive origin, Interactive target) {
-		if (_BeSawEffect!=null) {
-			if (MadeAction())
-				_BeSawEffect.MakeEffect(origin,target);
-		}
-	}
-
-	public void Attacked (Interactive origin, Interactive target) {
-		if (_AttackedEffect!=null) {
-			if (MadeAction())
-				_AttackedEffect.MakeEffect(origin,target);
+				effect.MakeEffect(origin,target);
 		}
 	}
 	#endregion
@@ -138,4 +120,17 @@ public class Accessory {
 		MyGameObject.GetComponent<Interactive>().BeDestroyed();
 	}
 
+	public void IncreaseModifierValue (ModifierType type) {
+		switch (type) {
+		case ModifierType.Strength:
+			_StrengthModifier++;
+			break;
+		case ModifierType.Range:
+			_RangeModifier++;
+			break;
+		case ModifierType.EnemyVision:
+			_EnemyVisionModifier++;
+			break;
+		}
+	}
 }
