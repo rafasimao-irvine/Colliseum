@@ -46,6 +46,12 @@ public class EnemiesController : TurnController {
 	 * performs collective enemies arrangements.
 	 * */
 	private IEnumerator MakeEnemiesAIActions() {
+		// Wait possible effects from player turn
+		foreach (Enemy e in _Enemies) {
+			while (e.IsInAction())
+				yield return new WaitForSeconds(0.1f);
+		}
+
 		// Prepare enemies
 		foreach (Enemy e in _Enemies)
 			e.PrepareTurnAction();
