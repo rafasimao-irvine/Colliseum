@@ -317,7 +317,10 @@ public class MapController : MonoBehaviour {
 		return flower;
 	}
 
-	// Get the next tile following the given direction, if any is ther returns null
+	/**
+	 * Get the next tile following the given direction, 
+	 * if dont find returns null.
+	 */
 	public Tile GetNextTile (Tile origin, Vector2 direction) {
 		if(origin==null)
 			return null;
