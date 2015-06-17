@@ -241,8 +241,15 @@ public abstract class Characther : Attackable {
 			_CharWeapons.IsFirstWeaponReady() : true;
 	}
 
+	// Setters ---------------------------------------------
 	public void SetMyTile (Tile t) {
 		MyTile = t;
+	}
+
+	public void Heal (int healing) {
+		_Life += healing;
+		if (_Life>_MaxLife)
+			_Life = _MaxLife;
 	}
 
 	// with modifiers
