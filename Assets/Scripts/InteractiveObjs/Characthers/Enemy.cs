@@ -16,12 +16,14 @@ public class Enemy : Characther {
 
 	[SerializeField]
 	protected WeaponEffect _InitialWeapon;
+	[SerializeField]
+	protected AccessoryEffect _InitialAccessory;
 
 	// Prepared Action
 	public enum ActionType {
 		None, Move, MoveWithAttack, Attack, SeeTarget,
 		Heal, Fusion, MoveAndPlaceTrap, MoveAndAlarm, 
-		Invoke
+		Invoke, UseAccessory
 	}
 	public struct Action {
 		public ActionType Type;
@@ -35,7 +37,8 @@ public class Enemy : Characther {
 		None, MoveRandom, FollowPersonage, AttackPersonage, 
 		RunFromPersonage, RunAttackRand, MoveRandAttackRand,
 		MoveRandAndHeal, MoveRandAndFusion, FollowAndFusion,
-		FollowAndPlaceTraps, RunAndAlarm, MoveRandAndInvoke
+		FollowAndPlaceTraps, RunAndAlarm, MoveRandAndInvoke,
+		UseAccessoryOnTarget
 	}
 	[SerializeField]
 	protected AIAction _NoPersonageAction, _SawPersonageAction, _PersonageInRangeAction;
@@ -53,6 +56,9 @@ public class Enemy : Characther {
 		base.Start ();
 		if (_InitialWeapon!=null)
 			TryToEquip(_InitialWeapon.GetWeapon());
+
+		if (_InitialAccessory!=null)
+			TryToEquip(_InitialAccessory.GetAccessory());
 	}
 
 	#region Enemy Actions --------------------------------------
@@ -133,6 +139,9 @@ public class Enemy : Characther {
 		case ActionType.Invoke:
 			CreateAt(action.TargetTile);
 			break;
+		case ActionType.UseAccessory:
+			UseAccessory(action.TargetTile);
+			break;
 		}
 	}
 
@@ -208,6 +217,11 @@ public class Enemy : Characther {
 				FindObjectOfType<EnemiesController>().AddEnemy((Enemy)iObj);
 		}
 	}
+
+	protected void UseAccessory (Tile tile) {
+		if (_CharAccessories.GetAccessory(0) != null)
+			_CharAccessories.Activate(0, this, tile);
+	}
 	#endregion
 
 	#region AIActions --------------------------------------
@@ -250,6 +264,9 @@ public class Enemy : Characther {
 			break;
 		case AIAction.MoveRandAndInvoke:
 			MoveRandAndInvoke();
+			break;
+		case AIAction.UseAccessoryOnTarget:
+			UseAccessoryOnTarget();
 			break;
 		}
 	}
@@ -394,6 +411,11 @@ public class Enemy : Characther {
 
 		if (PreparedAction.Type == ActionType.None)
 			MoveRandom();
+	}
+
+	protected void UseAccessoryOnTarget () {
+		if (TargetChar!=null && !TargetChar.IsDead())
+			SetPreparedAction(ActionType.UseAccessory,TargetChar.MyTile);
 	}
 
 	#endregion -------------------------------------------

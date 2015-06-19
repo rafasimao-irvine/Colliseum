@@ -88,14 +88,10 @@ public class AttractEffect : GameEffect {
 			// Get tile that will slide to
 			Tile tile = MapController.Instance.GetNextTile(targetTile, direction);
 
-			Debug.Log("Foi1 "+tile.X);
-
 			// Add the slideFeat that will move the characther
 			if (tile!=null && (tile.OnTop==null || (tile.OnTop!=null && !tile.OnTop.Blockable))) {
 				target.AddMovementFeat(new SlideFeat(tile));
 				if (target is Personage) ((Personage)target).InterruptActions();
-
-				Debug.Log("Foi");
 
 				return true;
 			}

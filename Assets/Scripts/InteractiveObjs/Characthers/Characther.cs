@@ -150,6 +150,7 @@ public abstract class Characther : Attackable {
 			target.BeAttacked(this, GetCharAtkDamage(target));
 
 		_CharAccessories.OnAttack(this, target);
+		BeVisible();
 	}
 
 	protected void Attack (Tile targetTile) {
@@ -162,6 +163,7 @@ public abstract class Characther : Attackable {
 			_CharWeapons.Attack(this, targetTile);
 
 			_CharAccessories.OnAttack(this, targetTile.OnTop);
+			BeVisible();
 		}
 	}
 
@@ -299,6 +301,10 @@ public abstract class Characther : Attackable {
 
 	public void BeInvisible (int turns) {
 		_CharStatus.BeInvisible(turns);
+	}
+
+	public void BeVisible () {
+		_CharStatus.BeInvisible(0);
 	}
 
 	// Getters

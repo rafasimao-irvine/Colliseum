@@ -49,6 +49,9 @@ public abstract class GameEffect : MonoBehaviour {
 		
 		// Make Effect
 		switch (_EffectTarget) {
+		case EffectTarget.Origin:
+			DoEffect(origin, origin);
+			break;
 		case EffectTarget.OriginNeighbours:
 			DoEffectToNeighbours(origin);
 			break;
