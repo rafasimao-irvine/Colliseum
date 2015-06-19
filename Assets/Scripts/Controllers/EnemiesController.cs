@@ -11,12 +11,13 @@ public class EnemiesController : TurnController {
 	// Enemies
 	public Creatable[] Enemies;
 
-	private List<Enemy> _Enemies;
+	private List<Enemy> _Enemies, _EnemiesOnWait;
 
 	public PlayerController PlayerController;
 
 	void Awake () {
 		_Enemies = new List<Enemy>();
+		_EnemiesOnWait = new List<Enemy>();
 	}
 	
 	// Update is called once per frame
@@ -36,8 +37,17 @@ public class EnemiesController : TurnController {
 			foreach(Enemy e in _Enemies)
 				if(e.IsInAction())
 					anyPlaying = true;
-			if(!anyPlaying)
+			if(!anyPlaying) {
 				_MadeAction = _IsMyTurn=false;
+				IntegrateAddedEnemies();
+			}
+		}
+	}
+
+	private void IntegrateAddedEnemies () {
+		if (_EnemiesOnWait.Count > 0) {
+			_Enemies.AddRange(_EnemiesOnWait);
+			_EnemiesOnWait.Clear();
 		}
 	}
 
@@ -103,9 +113,12 @@ public class EnemiesController : TurnController {
 		List<Tile> placed = new List<Tile>();
 		foreach (Enemy e in _Enemies) {
 			if (e.PreparedAction.Type == Enemy.ActionType.Move || 
-			    e.PreparedAction.Type == Enemy.ActionType.MoveWithAttack) {
-				if (!placed.Contains(e.PreparedAction.Target))
-					placed.Add (e.PreparedAction.Target);
+			    e.PreparedAction.Type == Enemy.ActionType.MoveWithAttack || 
+			    e.PreparedAction.Type == Enemy.ActionType.MoveAndPlaceTrap ||
+			    e.PreparedAction.Type == Enemy.ActionType.MoveAndAlarm ||
+			    e.PreparedAction.Type == Enemy.ActionType.Invoke) {
+				if (!placed.Contains(e.PreparedAction.TargetTile))
+					placed.Add (e.PreparedAction.TargetTile);
 				else
 					e.SetPreparedAction(Enemy.ActionType.None);
 			}
@@ -136,6 +149,11 @@ public class EnemiesController : TurnController {
 			MapController.Instance.PlaceItAt(
 				_Enemies[_Enemies.Count-1],enemiesStances[i].X,enemiesStances[i].Y);
 		}
+	}
+
+	public void AddEnemy (Enemy e) {
+		_EnemiesOnWait.Add(e);
+		e.TargetChar = PlayerController.PlayerPersonage;
 	}
 
 	/**
