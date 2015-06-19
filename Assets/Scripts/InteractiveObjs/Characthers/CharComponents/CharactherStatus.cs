@@ -7,6 +7,8 @@ public class CharactherStatus {
 	protected int _TrappedTurns = 0;
 	protected int _ParalizedTurns = 0;
 	protected int _BlindedTurns = 0;
+	protected int _DefenseTurns = 0;
+	protected int _InvisibleTurns = 0;
 	
 	protected bool _IsBuffed = false;
 	//protected int _BuffTurns = 0;
@@ -19,6 +21,8 @@ public class CharactherStatus {
 		if (_TrappedTurns>0) _TrappedTurns--;
 		if (_ParalizedTurns>0) _ParalizedTurns--;
 		if (_BlindedTurns>0) _BlindedTurns--;
+		if (_DefenseTurns>0) _DefenseTurns--;
+		if (_InvisibleTurns>0) _InvisibleTurns--;
 	}
 
 	public bool IsTrapped () {
@@ -35,6 +39,14 @@ public class CharactherStatus {
 
 	public bool IsBuffered () {
 		return _IsBuffed;
+	}
+
+	public bool IsDefensive () {
+		return (_DefenseTurns > 0);
+	}
+
+	public bool IsInvisible () {
+		return (_InvisibleTurns > 0);
 	}
 
 	#region Users
@@ -75,6 +87,16 @@ public class CharactherStatus {
 	public void BeBlinded (int turns) {
 		_BlindedTurns = turns;
 		Logger.strLog += "\n"+GetType()+" ficou cego por "+turns+" turnos.";
+	}
+
+	public void BeDefensive (int turns) {
+		_DefenseTurns = turns;
+		Logger.strLog += "\n"+GetType()+" esta em defesa por "+turns+" turnos.";
+	}
+
+	public void BeInvisible (int turns) {
+		_InvisibleTurns = turns;
+		Logger.strLog += "\n"+GetType()+" ficou invisivel por "+turns+" turnos.";
 	}
 	#endregion
 }

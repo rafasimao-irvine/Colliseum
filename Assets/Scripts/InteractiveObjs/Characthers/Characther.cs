@@ -173,7 +173,8 @@ public abstract class Characther : Attackable {
 	// Overrides ---------------------------------------
 	//Be hitted by something
 	public override void BeAttacked (Interactive iObj, int damage) {
-		_Life -= damage;
+		if (!IsDefensive())
+			_Life -= damage;
 		if (_Life<1 && Attackable) {
 			GetComponent<Animation>().Play("Dead");
 			Attackable = false;
@@ -271,7 +272,7 @@ public abstract class Characther : Attackable {
 		return _CharAccessories.GetEnemyVisionModifier();
 	}
 
-	// Player Status ---------------------------------------
+	#region Player Status ---------------------------------------
 	public void BeTrapped (int turns) {
 		_CharStatus.BeTrapped(turns);
 	}
@@ -292,6 +293,15 @@ public abstract class Characther : Attackable {
 		_CharStatus.BeParalized(0);
 	}
 
+	public void BeDefensive (int turns) {
+		_CharStatus.BeDefensive(turns);
+	}
+
+	public void BeInvisible (int turns) {
+		_CharStatus.BeInvisible(turns);
+	}
+
+	// Getters
 	public bool IsTrapped () {
 		return _CharStatus.IsTrapped();
 	}
@@ -307,6 +317,15 @@ public abstract class Characther : Attackable {
 	public bool IsBlinded () {
 		return _CharStatus.IsBlinded();
 	}
+
+	public bool IsDefensive () {
+		return _CharStatus.IsDefensive();
+	}
+
+	public bool IsInvisible () {
+		return _CharStatus.IsInvisible();
+	}
+	#endregion
 
 	// BeSaw by another char
 	virtual public void BeSaw (Interactive target) {

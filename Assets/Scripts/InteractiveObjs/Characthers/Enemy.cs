@@ -64,7 +64,7 @@ public class Enemy : Characther {
 			SetPreparedAction(ActionType.None); // Do nothing
 
 		// If it is close to the target personage, perceive it!
-		else if (!_SawPersonage &&
+		else if (!_SawPersonage && !TargetChar.IsInvisible() &&
 		    mapController.GetNeighbours(MyTile,GetVisionRange()).Contains(TargetChar.MyTile))
 			SetPreparedAction(ActionType.SeeTarget);
 		
