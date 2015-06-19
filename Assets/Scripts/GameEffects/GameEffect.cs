@@ -10,7 +10,7 @@ public abstract class GameEffect : MonoBehaviour {
 
 	// Tiles the Effect will occur On
 	public enum EffectTarget {
-		None, OriginNeighbours, Line, Target, TargetBlock
+		None, Origin, OriginNeighbours, Line, Target, TargetBlock
 	}
 	[SerializeField]
 	private EffectTarget _EffectTarget;
@@ -25,6 +25,9 @@ public abstract class GameEffect : MonoBehaviour {
 
 		// Make Effect
 		switch (_EffectTarget) {
+		case EffectTarget.Origin:
+			DoEffect(origin, origin);
+			break;
 		case EffectTarget.OriginNeighbours:
 			DoEffectToNeighbours(origin);
 			break;
