@@ -98,5 +98,8 @@ public class CharactherTest : MonoBehaviour {
 		public bool IsBuffed(){
 			return true;
 		}
+
+		protected override void BecomeInvisible () {}
+		protected override void BecomeVisible () {}
 	}
 }

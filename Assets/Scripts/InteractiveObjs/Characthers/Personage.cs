@@ -196,4 +196,7 @@ public class Personage : Characther {
 				if (t!=null) t.SelectTile(selected);
 	}
 
+	protected override void BecomeInvisible () {}
+	protected override void BecomeVisible () {}
+
 }

@@ -9,6 +9,9 @@ namespace UnitTest {
 		protected override bool MakeTurnAction () {
 			return true;
 		}
+
+		protected override void BecomeInvisible () {}
+		protected override void BecomeVisible () {}
 	}
 
 	class MoqInteractive : Interactive {

@@ -66,6 +66,10 @@ public class Enemy : Characther {
 		MapController mapController = MapController.Instance;
 		SetPreparedAction(ActionType.None);
 
+		// If invisible stop seeing it
+		if (TargetChar.IsInvisible())
+			_SawPersonage = false;
+
 		if (IsDead() || _CharStatus.IsTrapped())
 			SetPreparedAction(ActionType.None); // Do nothing
 
@@ -220,7 +224,7 @@ public class Enemy : Characther {
 
 	protected void UseAccessory (Tile tile) {
 		if (_CharAccessories.GetAccessory(0) != null)
-			_CharAccessories.Activate(0, this, tile);
+			ActivateAccessory(0, tile);
 	}
 	#endregion
 
@@ -459,5 +463,20 @@ public class Enemy : Characther {
 	public int GetVisionRange () {
 		int result = _VisionRange + TargetChar.UseEnemyVisionModifier();
 		return (result<1) ? 1 : result;
+	}
+
+	protected override void BecomeInvisible () {
+		ChangeLayersRecursively(transform,9);
+	}
+
+	protected override void BecomeVisible () {
+		ChangeLayersRecursively(transform,0);
+	}
+
+	protected void ChangeLayersRecursively (Transform trans, int layer) {
+		foreach (Transform child in trans) {
+			child.gameObject.layer = layer;
+			ChangeLayersRecursively(child, layer);
+		}
 	}
 }

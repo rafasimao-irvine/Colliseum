@@ -108,7 +108,11 @@ public abstract class Characther : Attackable {
 	}
 
 	protected void UpdateComponents () {
-		_CharStatus.UpdateStatus();
+		if (IsInvisible()) {
+			_CharStatus.UpdateStatus();
+			ChangeVisbility();
+		} else
+			_CharStatus.UpdateStatus();
 		_CharWeapons.UpdateWeapons();
 		_CharAccessories.UpdateAccessories();
 	}
@@ -121,7 +125,7 @@ public abstract class Characther : Attackable {
 			_CharMovement.AddMoveTo(tile);
 	}
 
-	protected void ActivateMoveFowardAtk (Vector2 dir) {
+	public void ActivateMoveFowardAtk (Vector2 dir) {
 		if (_CharMovement.IsMoving()) {
 			_MoveFowardAtk = true;
 			_MoveFowardAtkDirection = dir;
@@ -175,8 +179,13 @@ public abstract class Characther : Attackable {
 	// Overrides ---------------------------------------
 	//Be hitted by something
 	public override void BeAttacked (Interactive iObj, int damage) {
+
+		if (IsInvisible())
+			BeVisible();
+
 		if (!IsDefensive())
 			_Life -= damage;
+
 		if (_Life<1 && Attackable) {
 			GetComponent<Animation>().Play("Dead");
 			Attackable = false;
@@ -226,36 +235,16 @@ public abstract class Characther : Attackable {
 		_CharAccessories.Activate(index, this, tile);
 	}
 
-	// Getters ---------------------------------------------
-	public bool IsDead () {
-		return (_Life < 1);
+	// BeSaw by another char
+	virtual public void BeSaw (Interactive target) {
+		_CharAccessories.OnBeSaw(this, target);
+		if (_CharHUD!=null) _CharHUD.ShowSurprised();
 	}
 
-	public int GetMaxLife () {
-		return _MaxLife;
-	}
+	virtual protected void BecomeInvisible(){}
+	virtual protected void BecomeVisible(){}
 
-	public int GetLife () {
-		return _Life;
-	}
-
-	public bool IsAttackReady () {
-		return (_CharWeapons.IsAnyFirstWeaponEquipped()) ? 
-			_CharWeapons.IsFirstWeaponReady() : true;
-	}
-
-	// Setters ---------------------------------------------
-	public void SetMyTile (Tile t) {
-		MyTile = t;
-	}
-
-	public void Heal (int healing) {
-		_Life += healing;
-		if (_Life>_MaxLife)
-			_Life = _MaxLife;
-	}
-
-	// with modifiers
+	#region Modifiers -----------------------------------------
 	public int UseStrengthModifiers (Interactive target) {
 		return _CharStatus.UseStrengthModifiers(target) + _CharAccessories.GetStrengthModifier();
 	}
@@ -273,6 +262,7 @@ public abstract class Characther : Attackable {
 	public int UseEnemyVisionModifier () {
 		return _CharAccessories.GetEnemyVisionModifier();
 	}
+	#endregion
 
 	#region Player Status ---------------------------------------
 	public void BeTrapped (int turns) {
@@ -301,10 +291,19 @@ public abstract class Characther : Attackable {
 
 	public void BeInvisible (int turns) {
 		_CharStatus.BeInvisible(turns);
+		ChangeVisbility();
 	}
 
 	public void BeVisible () {
 		_CharStatus.BeInvisible(0);
+		ChangeVisbility();
+	}
+
+	protected void ChangeVisbility() {
+		if (IsInvisible())
+			BecomeInvisible();
+		else
+			BecomeVisible();
 	}
 
 	// Getters
@@ -333,10 +332,33 @@ public abstract class Characther : Attackable {
 	}
 	#endregion
 
-	// BeSaw by another char
-	virtual public void BeSaw (Interactive target) {
-		_CharAccessories.OnBeSaw(this, target);
-		if (_CharHUD!=null) _CharHUD.ShowSurprised();
+	// Getters ---------------------------------------------
+	public bool IsDead () {
+		return (_Life < 1);
+	}
+	
+	public int GetMaxLife () {
+		return _MaxLife;
+	}
+	
+	public int GetLife () {
+		return _Life;
+	}
+	
+	public bool IsAttackReady () {
+		return (_CharWeapons.IsAnyFirstWeaponEquipped()) ? 
+			_CharWeapons.IsFirstWeaponReady() : true;
+	}
+	
+	// Setters ---------------------------------------------
+	public void SetMyTile (Tile t) {
+		MyTile = t;
+	}
+	
+	public void Heal (int healing) {
+		_Life += healing;
+		if (_Life>_MaxLife)
+			_Life = _MaxLife;
 	}
 
 }
