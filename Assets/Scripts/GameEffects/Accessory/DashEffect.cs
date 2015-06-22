@@ -29,7 +29,7 @@ public class DashEffect : GameEffect {
 			int selected = -2;
 			for (int i=0; i<line.Count; i++) {
 				if (line[i].OnTop != null) {
-					selected = i-1;
+					selected = (!line[i].OnTop.Blockable && !line[i].OnTop.Unpathable) ? i : i-1;
 					i = line.Count; // Break out of the loop
 				} else if (line[i] == targetTile || i==line.Count-1) {
 					selected = i;
