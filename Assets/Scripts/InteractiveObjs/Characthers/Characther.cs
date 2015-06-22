@@ -183,7 +183,9 @@ public abstract class Characther : Attackable {
 		if (IsInvisible())
 			BeVisible();
 
-		if (!IsDefensive())
+		if (IsAbsorbing())
+			Heal(damage);
+		else if (!IsDefensive())
 			_Life -= damage;
 
 		if (_Life<1 && Attackable) {
@@ -306,6 +308,10 @@ public abstract class Characther : Attackable {
 			BecomeVisible();
 	}
 
+	public void BeAbsorptive (int turns) {
+		_CharStatus.BeAbsorptive(turns);
+	}
+
 	// Getters
 	public bool IsTrapped () {
 		return _CharStatus.IsTrapped();
@@ -329,6 +335,10 @@ public abstract class Characther : Attackable {
 
 	public bool IsInvisible () {
 		return _CharStatus.IsInvisible();
+	}
+
+	public bool IsAbsorbing () {
+		return _CharStatus.IsAbsorbing();
 	}
 	#endregion
 

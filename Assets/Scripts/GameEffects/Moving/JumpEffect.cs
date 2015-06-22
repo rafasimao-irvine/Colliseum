@@ -9,7 +9,9 @@ using System.Collections.Generic;
 public class JumpEffect : GameEffect {
 
 	[SerializeField]
-	private bool _IsFromOrigin, _IsReverse;
+	private bool _IsFromOrigin;
+	[SerializeField]
+	private bool _IsReverse;
 
 	[SerializeField]
 	private int _ThrowingRange;

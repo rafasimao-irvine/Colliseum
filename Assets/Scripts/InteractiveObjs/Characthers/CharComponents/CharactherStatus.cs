@@ -9,6 +9,7 @@ public class CharactherStatus {
 	protected int _BlindedTurns = 0;
 	protected int _DefenseTurns = 0;
 	protected int _InvisibleTurns = 0;
+	protected int _AbsorbTurns = 0;
 	
 	protected bool _IsBuffed = false;
 	//protected int _BuffTurns = 0;
@@ -23,6 +24,7 @@ public class CharactherStatus {
 		if (_BlindedTurns>0) _BlindedTurns--;
 		if (_DefenseTurns>0) _DefenseTurns--;
 		if (_InvisibleTurns>0) _InvisibleTurns--;
+		if (_AbsorbTurns>0) _AbsorbTurns--;
 	}
 
 	public bool IsTrapped () {
@@ -47,6 +49,10 @@ public class CharactherStatus {
 
 	public bool IsInvisible () {
 		return (_InvisibleTurns > 0);
+	}
+
+	public bool IsAbsorbing () {
+		return (_AbsorbTurns > 0);
 	}
 
 	#region Users
@@ -97,6 +103,11 @@ public class CharactherStatus {
 	public void BeInvisible (int turns) {
 		_InvisibleTurns = turns;
 		Logger.strLog += "\n"+GetType()+" ficou invisivel por "+turns+" turnos.";
+	}
+
+	public void BeAbsorptive (int turns) {
+		_AbsorbTurns = turns;
+		Logger.strLog += "\n"+GetType()+" vai absorver danos por "+turns+" turnos.";
 	}
 	#endregion
 }
