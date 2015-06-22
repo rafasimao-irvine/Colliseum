@@ -9,13 +9,17 @@ using System.Collections.Generic;
 public class JumpEffect : GameEffect {
 
 	[SerializeField]
+	private bool _IsFromOrigin, _IsReverse;
+
+	[SerializeField]
 	private int _ThrowingRange;
 
 	protected override void DoEffect (Interactive origin, Interactive target) {
-		Tile targetTile = null;
-		List<Tile> line = MapController.Instance.GetLine(
-			origin.MyTile,MapController.Instance.GetDirection(target.MyTile,origin.MyTile),_ThrowingRange);
+		target = target.GetBeAttackedTarget();
+
+		List<Tile> line = GetLine(origin,target);
 		
+		Tile targetTile = null;
 		for (int i=0; i<line.Count; i++) {
 			// Is it a valid map tile?
 			if (line[i]!=null && (line[i].OnTop==null || !line[i].OnTop.Blockable))
@@ -29,5 +33,14 @@ public class JumpEffect : GameEffect {
 			if (target is Characther) ((Characther)target).AddMovementFeat(new JumpFeat(targetTile));
 			if (target is Personage) ((Personage)target).InterruptActions();
 		}
+	}
+
+	private List<Tile> GetLine (Interactive origin, Interactive target) {
+		Tile fromTile = (_IsFromOrigin) ? origin.MyTile : target.MyTile;
+		Vector2 dir = (_IsReverse) ?
+			MapController.Instance.GetDirection(target.MyTile,origin.MyTile) :
+				MapController.Instance.GetDirection(origin.MyTile,target.MyTile);
+
+		return MapController.Instance.GetLine(fromTile,dir,_ThrowingRange);
 	}
 }
