@@ -7,7 +7,7 @@ public class CharacthersHolder : MonoBehaviour {
 	public EnemiesController EnemiesControll;
 	public PlayerController PlayerControll;
 
-	public List<Characther> Personages, Enemies;
+	public List<Characther> Personages, Enemies, AllChars;
 
 	#region Singleton ------------------------------------------
 	public static CharacthersHolder Instance {get; private set;}
@@ -45,6 +45,7 @@ public class CharacthersHolder : MonoBehaviour {
 			Enemies.Add(c);
 			break;
 		}
+		AllChars.Add(c);
 	}
 
 	private void RemoveChar (Characther c) {
@@ -58,6 +59,7 @@ public class CharacthersHolder : MonoBehaviour {
 			Enemies.Remove(c);
 			break;
 		}
+		AllChars.Remove(c);
 	}
 
 	public void AddChar (Characther c) {
@@ -70,6 +72,10 @@ public class CharacthersHolder : MonoBehaviour {
 		RemoveChar(c);
 		c.MyType = newType;
 		AllocateChar(c);
+	}
+
+	public void ChangeCharHuntType (Characther c, Characther.Types newHuntType) {
+		c.HuntType = newHuntType;
 	}
 
 	public List<Characther> GetChars (Characther.Types type) {
@@ -87,6 +93,10 @@ public class CharacthersHolder : MonoBehaviour {
 		}
 
 		return chars;
+	}
+
+	public List<Characther> GetAllChars () {
+		return AllChars;
 	}
 
 }

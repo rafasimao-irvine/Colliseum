@@ -124,7 +124,7 @@ public class Enemy : Characther {
 		MapController map = MapController.Instance;
 
 		// If invisible stop seeing it
-		if (TargetChar!=null && (TargetChar.IsInvisible() || TargetChar.IsDead()))
+		if (TargetChar!=null && (TargetChar == this || TargetChar.IsInvisible() || TargetChar.IsDead()))
 			TargetChar = null;
 
 		List<Characther> targets = CharacthersHolder.Instance.GetChars(HuntType);
@@ -536,4 +536,10 @@ public class Enemy : Characther {
 		}
 	}
 	#endregion
+
+	public override void Resurrect () {
+		base.Resurrect ();
+		TargetChar = null;
+		_SawPersonage = false;
+	}
 }

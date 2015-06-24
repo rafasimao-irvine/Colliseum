@@ -374,4 +374,12 @@ public abstract class Characther : Attackable {
 			_Life = _MaxLife;
 	}
 
+	virtual public void Resurrect () {
+		_Life = _MaxLife;
+		MyTile.TryGetIn(this);
+		Attackable = true;
+		GetComponent<Collider>().enabled = true;
+		GetComponent<Rigidbody>().useGravity = true;
+	}
+
 }

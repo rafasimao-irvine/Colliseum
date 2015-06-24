@@ -29,7 +29,7 @@ public class EnchanterEffect : GameEffect {
 					}
 				}
 
-				targetEnemy.HuntType = Characther.Types.Enemy;
+				CharacthersHolder.Instance.ChangeCharHuntType(targetEnemy, Characther.Types.Enemy);
 				targetEnemy.RevealTargetCharacther(closerEnemy);
 			}
 			else

@@ -102,6 +102,7 @@ public class EnemiesController : TurnController {
 				if (e.PreparedAction.Type != Enemy.ActionType.SeeTarget && 
 				    !e.SawTarget() && 
 				    eSaw.HuntType == e.HuntType && 
+				    //eSaw.TargetChar != e &&
 				    map.GetDistance(eSaw.MyTile, e.MyTile) <= eSaw.GetVisionRange()) {
 					e.SetPreparedAction(Enemy.ActionType.SeeTarget);
 					e.TargetChar = eSaw.TargetChar;
