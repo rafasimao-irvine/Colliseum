@@ -5,8 +5,13 @@ using System.Collections.Generic;
 public class AlarmEffect : GameEffect {
 
 	protected override void DoEffect (Interactive origin, Interactive target) {
-		if (target.GetBeAttackedTarget() is Enemy)
-			((Enemy)target.GetBeAttackedTarget()).RevealTargetCharacther();
+		target = target.GetBeAttackedTarget();
+		if (target is Enemy) {
+			if (origin is Enemy)
+				((Enemy)target).RevealTargetCharacther(((Enemy)origin).TargetChar);
+			else if (origin is Characther)
+				((Enemy)target).RevealTargetCharacther((Characther)origin);
+		}
 	}
 
 }

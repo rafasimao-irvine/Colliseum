@@ -62,7 +62,7 @@ public class Enemy : Characther {
 	}
 
 	#region Enemy Actions --------------------------------------
-	public void PrepareTurnAction () {
+	/*public void PrepareTurnAction () {
 		MapController mapController = MapController.Instance;
 		SetPreparedAction(ActionType.None);
 
@@ -89,6 +89,56 @@ public class Enemy : Characther {
 		// Otherwise move towards it
 		else
 			AIPrepareAction(_SawPersonageAction);
+	}*/
+
+	public void PrepareTurnAction () {
+		PrepareTargetChar();
+		if (TargetChar == null)
+			_SawPersonage = false;
+
+		MapController mapController = MapController.Instance;
+		SetPreparedAction(ActionType.None);
+
+		if (IsDead() || _CharStatus.IsTrapped())
+			SetPreparedAction(ActionType.None); // Do nothing
+		
+		// If it is close to the target personage, perceive it!
+		else if (!_SawPersonage && TargetChar!=null && !TargetChar.IsInvisible() &&
+		         mapController.GetNeighbours(MyTile,GetVisionRange()).Contains(TargetChar.MyTile))
+			SetPreparedAction(ActionType.SeeTarget);
+		
+		// If it haven't seen the player yet
+		else if (!_SawPersonage || TargetChar==null || TargetChar.IsDead())
+			AIPrepareAction(_NoPersonageAction);
+		
+		// If it is close to the target personage, attack!
+		else if (mapController.GetDistance(MyTile,TargetChar.MyTile) <= GetCurrentAttackRange())
+			AIPrepareAction(_PersonageInRangeAction);
+		
+		// Otherwise move towards it
+		else
+			AIPrepareAction(_SawPersonageAction);
+	}
+
+	protected void PrepareTargetChar () {
+		MapController map = MapController.Instance;
+
+		// If invisible stop seeing it
+		if (TargetChar!=null && (TargetChar.IsInvisible() || TargetChar.IsDead()))
+			TargetChar = null;
+
+		List<Characther> targets = CharacthersHolder.Instance.GetChars(HuntType);
+		int dist = (TargetChar==null) ? GetVisionRange()+1 : map.GetDistance(MyTile, TargetChar.MyTile);
+		for (int i=0; i<targets.Count; i++) {
+			if (targets[i]!=this && !targets[i].IsInvisible() && !targets[i].IsDead()) {
+				int d = map.GetDistance(MyTile,targets[i].MyTile);
+				if (dist > d) {
+					dist = d;
+					TargetChar = targets[i];
+				}
+			}
+		}
+
 	}
 
 	public void SetPreparedAction (ActionType type, Tile tile = null, Characther c = null) {
@@ -207,7 +257,7 @@ public class Enemy : Characther {
 		List<Tile> tiles = MapController.Instance.GetNeighbours(MyTile,_VisionRange);
 		for (int i=0; i<tiles.Count; i++) {
 			if (tiles[i].OnTop != null && tiles[i].OnTop.GetBeAttackedTarget() is Enemy)
-				((Enemy)tiles[i].OnTop.GetBeAttackedTarget()).RevealTargetCharacther();
+				((Enemy)tiles[i].OnTop.GetBeAttackedTarget()).RevealTargetCharacther(TargetChar);
 		}
 
 		Move(tile);
@@ -445,14 +495,17 @@ public class Enemy : Characther {
 	}
 	#endregion --------------------------------------------
 
-	public void RevealTargetCharacther () {
-		if (!_CharStatus.IsBlinded()) {
+	#region Enemy Vision ----------------------------------
+	public void RevealTargetCharacther (Characther target) {
+		if (!_CharStatus.IsBlinded() && target != null && target.MyType == HuntType) {
+			TargetChar = target;
 			_SawPersonage = true;
 			BeSaw(TargetChar);
 		}
 	}
 
 	public void ForgetTargetCharacther () {
+		TargetChar = null;
 		_SawPersonage = false;
 	}
 
@@ -461,10 +514,13 @@ public class Enemy : Characther {
 	}
 
 	public int GetVisionRange () {
-		int result = _VisionRange + TargetChar.UseEnemyVisionModifier();
+		int result = (TargetChar==null) ? _VisionRange : 
+			_VisionRange + TargetChar.UseEnemyVisionModifier();
 		return (result<1) ? 1 : result;
 	}
+	#endregion
 
+	#region Visibility ----------------------------------
 	protected override void BecomeInvisible () {
 		ChangeLayersRecursively(transform,9);
 	}
@@ -479,4 +535,5 @@ public class Enemy : Characther {
 			ChangeLayersRecursively(child, layer);
 		}
 	}
+	#endregion
 }

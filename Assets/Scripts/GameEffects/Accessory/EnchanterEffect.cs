@@ -9,6 +9,7 @@ using System.Collections.Generic;
 public class EnchanterEffect : GameEffect {
 
 	protected override void DoEffect (Interactive origin, Interactive target) {
+		target = target.GetBeAttackedTarget();
 		if (target != null && target is Enemy) {
 			Enemy targetEnemy = target as Enemy;
 
@@ -19,7 +20,7 @@ public class EnchanterEffect : GameEffect {
 				Enemy closerEnemy = null;
 				int closerDist = 0;
 				for (int i=0; i<enemies.Count; i++) {
-					if (enemies[i] != targetEnemy) {
+					if (enemies[i] != targetEnemy && !enemies[i].IsInvisible() && !enemies[i].IsDead()) {
 						int dist = mapControl.GetDistance(enemies[i].MyTile,target.MyTile);
 						if (closerEnemy==null || closerDist > dist) {
 							closerEnemy = enemies[i];
@@ -28,8 +29,8 @@ public class EnchanterEffect : GameEffect {
 					}
 				}
 
-				targetEnemy.TargetChar = closerEnemy;
-				targetEnemy.RevealTargetCharacther();
+				targetEnemy.HuntType = Characther.Types.Enemy;
+				targetEnemy.RevealTargetCharacther(closerEnemy);
 			}
 			else
 				targetEnemy.BeTrapped(1);

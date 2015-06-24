@@ -90,8 +90,8 @@ public class EnemiesController : TurnController {
 	private void ChainEnemiesSeeTarget () {
 		List<Enemy> eWhoSaw = new List<Enemy>();
 		foreach (Enemy e in _Enemies) {
-			if (e.PreparedAction.Type == Enemy.ActionType.SeeTarget &&
-			    e.TargetChar == PlayerController.PlayerPersonage)
+			if (e.PreparedAction.Type == Enemy.ActionType.SeeTarget)
+			    //&& e.TargetChar == PlayerController.PlayerPersonage)
 				eWhoSaw.Add(e);
 		}
 
@@ -101,9 +101,11 @@ public class EnemiesController : TurnController {
 			foreach (Enemy e in _Enemies) {
 				if (e.PreparedAction.Type != Enemy.ActionType.SeeTarget && 
 				    !e.SawTarget() && 
-				    eSaw.TargetChar == e.TargetChar && 
-				    map.GetDistance(eSaw.MyTile, e.MyTile) <= eSaw.GetVisionRange())
+				    eSaw.HuntType == e.HuntType && 
+				    map.GetDistance(eSaw.MyTile, e.MyTile) <= eSaw.GetVisionRange()) {
 					e.SetPreparedAction(Enemy.ActionType.SeeTarget);
+					e.TargetChar = eSaw.TargetChar;
+				}
 			}
 		}
 	}
@@ -133,7 +135,7 @@ public class EnemiesController : TurnController {
 			int quantity = Enemies[i].RandQuantity;
 			for (int q=0; q<quantity; q++){
 				_Enemies.Add(GeneralFabric.CreateObject<Enemy>(Enemies[i].Prefab, transform));
-				_Enemies[_Enemies.Count-1].TargetChar = PlayerController.PlayerPersonage;
+				//_Enemies[_Enemies.Count-1].TargetChar = PlayerController.PlayerPersonage;
 
 				MapController.Instance.PlaceIt(
 					MapController.Instance.GetMapTiles(), _Enemies[_Enemies.Count-1]);
@@ -144,7 +146,7 @@ public class EnemiesController : TurnController {
 	public void LoadEnemies (ObjectStance[] enemiesStances) {
 		for (int i=0; i<enemiesStances.Length; i++) {
 			_Enemies.Add(GeneralFabric.CreateObject<Enemy>(enemiesStances[i].Prefab, transform));
-			_Enemies[_Enemies.Count-1].TargetChar = PlayerController.PlayerPersonage;
+			//_Enemies[_Enemies.Count-1].TargetChar = PlayerController.PlayerPersonage;
 
 			MapController.Instance.PlaceItAt(
 				_Enemies[_Enemies.Count-1],enemiesStances[i].X,enemiesStances[i].Y);
@@ -153,7 +155,7 @@ public class EnemiesController : TurnController {
 
 	public void AddEnemy (Enemy e) {
 		_EnemiesOnWait.Add(e);
-		e.TargetChar = PlayerController.PlayerPersonage;
+		//e.TargetChar = PlayerController.PlayerPersonage;
 	}
 
 	/**

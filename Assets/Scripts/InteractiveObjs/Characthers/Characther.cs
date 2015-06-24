@@ -5,6 +5,9 @@ using System.Collections.Generic;
 // Facade class
 public abstract class Characther : Attackable {
 
+	public enum Types {None, Personage, Enemy}
+	public Types MyType, HuntType;
+
 	// Attributes
 	[SerializeField]
 	protected int _MaxLife = 2, _Life = 2;

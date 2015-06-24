@@ -13,6 +13,7 @@ public class GameController : MonoBehaviour {
 	public EnemiesController GCEnemiesController;
 	public ObjectsController GCObjectsController;
 	public MapController GCMapController;
+	public CharacthersHolder GCCharacthersHolder;
 
 	public bool IsLoadLevel;
 	public MoldedLevel Level;
@@ -31,6 +32,9 @@ public class GameController : MonoBehaviour {
 
 		// Place all the personages
 		GCMapController.PlaceIt(GCPlayerController.PlayerPersonage);
+
+		// Initiate the Holder
+		GCCharacthersHolder.Initiate();
 
 		// Sets the player to start the game
 		_CurrentTurn = Turns.PlayerTurn;
