@@ -1,8 +1,11 @@
 ﻿using UnityEngine;
-using UnityEditor;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public class Module : MonoBehaviour {
 
@@ -15,11 +18,14 @@ public class Module : MonoBehaviour {
 	public void Reset (GameObject prefab) {
 		Prefab = prefab;
 
+#if UNITY_EDITOR
 		StartCoroutine(ResetModuleImage(prefab));
+#endif
 
 		GetComponentInChildren<Text>().text = Prefab.name;
 	}
 
+#if UNITY_EDITOR
 	private IEnumerator ResetModuleImage (GameObject prefab) {
 		Texture2D preview = AssetPreview.GetAssetPreview(prefab);
 
@@ -30,6 +36,7 @@ public class Module : MonoBehaviour {
 			preview, new Rect(0,0,preview.width,preview.height), Vector2.zero);
 
 	}
+#endif
 
 	public void SelectPrefab () {
 		_Image.color = Color.yellow;

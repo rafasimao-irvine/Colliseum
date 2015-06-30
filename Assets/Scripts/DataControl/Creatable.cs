@@ -13,4 +13,13 @@ public class Creatable {
 			return (q<0) ? 0 : q;
 		}
 	}
+
+	public int Quantity {
+		get {
+			return RandQuantity;
+		}
+		set {
+			Min = Max = value;
+		}
+	}
 }

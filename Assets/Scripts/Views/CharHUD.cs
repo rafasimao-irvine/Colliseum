@@ -22,6 +22,7 @@ public class CharHUD : MonoBehaviour {
 	void Update () {
 		transform.rotation = _Rotation;
 		UpdateStatus();
+		HealthBar.maxValue = _Characther.GetMaxLife();
 		HealthBar.value = _Characther.GetLife();
 	}
 

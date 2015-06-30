@@ -17,7 +17,8 @@ public class Menu : MonoBehaviour {
 	}
 
 	public void Play () {
-		Application.LoadLevel("Battle");
+		//Application.LoadLevel("Battle");
+		Application.LoadLevel("PrepareLevel");
 	}
 
 	public void PlaceShowImage (Sprite image) {

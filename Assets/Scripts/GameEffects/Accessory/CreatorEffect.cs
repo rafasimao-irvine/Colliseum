@@ -18,8 +18,15 @@ public class CreatorEffect : GameEffect {
 		if (_ObjectPrefab!=null && targetTile!=null && targetTile.OnTop==null) {
 			Interactive interactive = GeneralFabric.CreateObject<Interactive>(_ObjectPrefab,null);
 			MapController.Instance.PlaceItAt(interactive, targetTile);
-			if (interactive is Characther)
+			if (interactive is Characther) {
 				CharacthersHolder.Instance.AddChar((Characther)interactive);
+				if (origin is Characther) {
+					CharacthersHolder.Instance.ChangeCharHuntType(
+						(Characther)interactive, ((Characther)origin).HuntType);
+					CharacthersHolder.Instance.ChangeCharType(
+						(Characther)interactive, ((Characther)origin).MyType);
+				}
+			}
 		}
 	}
 

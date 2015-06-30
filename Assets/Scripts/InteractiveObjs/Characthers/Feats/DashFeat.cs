@@ -13,10 +13,12 @@ public class DashFeat : IFeat {
 	}
 
 	virtual public void Start (Characther c, CharactherMovement cMove) {
-		cMove.SetSpeedModifier(_SpeedModifier);
-		cMove.AddMoveTo(_Target);
-		c.ActivateMoveFowardAtk(MapController.Instance.GetDirection(c.MyTile,_Target));
-		cMove.SetSpeedModifier(0f);
+		if (!c.IsParalized()) {
+			cMove.SetSpeedModifier(_SpeedModifier);
+			cMove.AddMoveTo(_Target);
+			c.ActivateMoveFowardAtk(MapController.Instance.GetDirection(c.MyTile,_Target));
+			cMove.SetSpeedModifier(0f);
+		}
 		_Finished = true;
 	}
 
