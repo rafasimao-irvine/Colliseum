@@ -45,9 +45,8 @@ public class ObjectsController : TurnController {
 	#endregion
 
 	private void Publish () {
-		for (int i=0; i<_MicroturnObjects.Count; i++) {
+		for (int i=0; i<_MicroturnObjects.Count; i++)
 			_MicroturnObjects[i].OnTurnChange();
-		}
 	}
 
 	public void Subscribe (MicroturnObject obj) {

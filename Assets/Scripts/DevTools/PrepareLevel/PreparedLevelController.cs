@@ -38,7 +38,7 @@ public class PreparedLevelController : MonoBehaviour {
 			objectsControll.Objects = Objects;
 			enemiesControll.Enemies = Enemies;
 		}
-		else if (SaveStats) {
+		else {
 			CreatablesModel[] models = FindObjectsOfType<CreatablesModel>();
 
 			if (models.Length == 3) {
@@ -51,15 +51,18 @@ public class PreparedLevelController : MonoBehaviour {
 	private void AssignModel (CreatablesModel model) {
 		if (model.name.Equals("ObjectsButton")) {
 			ObjectsModel = model;
-			CopyToArray(model.Creatables, Objects, 0);
+			if (SaveStats)
+				CopyToArray(model.Creatables, Objects, 0);
 		}
 		else if (model.name.Equals("ItensButton")){
 			ItensModel = model;
-			CopyToArray(model.Creatables, Objects, 0, ItensIndex);
+			if (SaveStats)
+				CopyToArray(model.Creatables, Objects, 0, ItensIndex);
 		}
 		else if (model.name.Equals("EnemiesButton")){
 			EnemiesModel = model;
-			model.Creatables = Enemies;
+			if (SaveStats)
+				model.Creatables = Enemies;
 		}
 	}
 
