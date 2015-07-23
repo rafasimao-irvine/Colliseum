@@ -98,8 +98,9 @@ public abstract class GameEffect : MonoBehaviour {
 
 	protected void DoEffectToManyTargets (Interactive origin, List<Tile> tiles) {
 		for (int i=0; i<tiles.Count; i++) {
-			if (tiles[i].OnTop != null)
-				DoEffect(origin, tiles[i].OnTop);
+			//if (tiles[i].OnTop != null)
+			//	DoEffect(origin, tiles[i].OnTop);
+			DoEffect(origin,tiles[i]);
 		}
 	}
 

@@ -339,9 +339,8 @@ public class Enemy : Characther {
 		List<Tile> path = MapController.Instance.FindPath(MyTile, target.MyTile);
 		
 		// Start the movement
-		if (path != null && path.Count > 0) {
+		if (path != null && path.Count > 0)
 			SetPreparedAction(ActionType.MoveWithAttack, path[0]);
-		}
 	}
 
 	protected void AttackPersonage () {

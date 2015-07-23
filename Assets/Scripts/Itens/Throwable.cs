@@ -8,42 +8,41 @@ public class Throwable : MonoBehaviour {
 	[SerializeField]
 	private int _MaxDistance;
 
-	private float _Offset = 1.5f;
+	private float _Offset = 2f;
 	private float _Force = 6f;
 
 	private Interactive _Origin;
 	private Rigidbody _Rigidbody;
-	private Collider _Collider;
+
+	public bool IsOn {get; private set;}
 
 	void Awake () {
 		_Rigidbody = GetComponent<Rigidbody>();
-		_Collider = GetComponent<Collider>();
-		_Collider.enabled = false;
+		TurnOn(false);
 	}
 
 	void Update () {
-		if (_Collider.enabled) {
+		if (IsOn) {
 			if ((transform.position - _Origin.transform.position).magnitude > _MaxDistance)
-				gameObject.SetActive(false);
+				TurnOn(false);
 		}
 	}
 
-	public void BeThrown (Interactive origin, Interactive target) {
+	public void BeThrown (Interactive origin, Tile targetTile) {
 		_Origin = origin;
-		gameObject.SetActive(true);
-
-		Vector3 direction = target.transform.position - origin.transform.position;
+		TurnOn();
+		
+		Vector3 direction = targetTile.transform.position - origin.transform.position;
 		direction.y = 0f;
-
+		
 		Vector3 pos = origin.transform.position;
 		pos.y= transform.position.y;
 		pos += direction.normalized * _Offset;
 		transform.position = pos;
-
+		
 		_Rigidbody.velocity = direction.normalized * _Force;
 		transform.rotation = Quaternion.LookRotation(direction);
-
-		_Collider.enabled = true;
+		
 	}
 
 	void OnCollisionEnter (Collision other) {
@@ -56,7 +55,12 @@ public class Throwable : MonoBehaviour {
 			other.rigidbody.velocity = Vector3.zero;
 		}
 
-		gameObject.SetActive(false);
+		TurnOn(false);
+	}
+
+	void TurnOn (bool on = true) {
+		IsOn = on;
+		gameObject.SetActive(on);
 	}
 
 }
