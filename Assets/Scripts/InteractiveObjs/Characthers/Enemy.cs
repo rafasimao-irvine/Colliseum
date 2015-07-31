@@ -33,15 +33,19 @@ public class Enemy : Characther {
 	public Action PreparedAction;
 
 	// AI's
-	protected enum AIAction {
+	/*
+	public enum AIAction {
 		None, MoveRandom, FollowPersonage, AttackPersonage, 
 		RunFromPersonage, RunAttackRand, MoveRandAttackRand,
 		MoveRandAndHeal, MoveRandAndFusion, FollowAndFusion,
 		FollowAndPlaceTraps, RunAndAlarm, MoveRandAndInvoke,
 		UseAccessoryOnTarget
 	}
+	*/
+
 	[SerializeField]
-	protected AIAction _NoPersonageAction, _SawPersonageAction, _PersonageInRangeAction;
+	protected EnemyAIFabric.AIAction _NoPersonageAction, _SawPersonageAction, _PersonageInRangeAction;
+	protected EnemyAI _NoPersonageAI, _SawPersonageAI, _PersonageInRangeAI;
 
 	// Boomer
 	[SerializeField]
@@ -59,6 +63,10 @@ public class Enemy : Characther {
 
 		if (_InitialAccessory!=null)
 			TryToEquip(_InitialAccessory.GetAccessory());
+
+		_NoPersonageAI = EnemyAIFabric.CreateEnemyAI(_NoPersonageAction);
+		_SawPersonageAI = EnemyAIFabric.CreateEnemyAI(_SawPersonageAction);
+		_PersonageInRangeAI = EnemyAIFabric.CreateEnemyAI(_PersonageInRangeAction);
 	}
 
 	#region Enemy Actions --------------------------------------
@@ -109,15 +117,18 @@ public class Enemy : Characther {
 		
 		// If it haven't seen the player yet
 		else if (!_SawPersonage || TargetChar==null || TargetChar.IsDead())
-			AIPrepareAction(_NoPersonageAction);
+			//AIPrepareAction(_NoPersonageAction);
+			AIPrepareAction(_NoPersonageAI);
 		
 		// If it is close to the target personage, attack!
 		else if (mapController.GetDistance(MyTile,TargetChar.MyTile) <= GetCurrentAttackRange())
-			AIPrepareAction(_PersonageInRangeAction);
+			//AIPrepareAction(_PersonageInRangeAction);
+			AIPrepareAction(_PersonageInRangeAI);
 		
 		// Otherwise move towards it
 		else
-			AIPrepareAction(_SawPersonageAction);
+			//AIPrepareAction(_SawPersonageAction);
+			AIPrepareAction(_SawPersonageAI);
 	}
 
 	protected void PrepareTargetChar () {
@@ -213,7 +224,7 @@ public class Enemy : Characther {
 			AddMoveTo(target);
 	}
 
-	protected bool IsMoveable (Tile tile) {
+	public bool IsMoveable (Tile tile) {
 		return 
 			(tile.OnTop == null ||
 			 (tile.OnTop != null && !tile.OnTop.Blockable && !tile.OnTop.Unpathable &&
@@ -264,7 +275,7 @@ public class Enemy : Characther {
 	}
 
 	protected void CreateAt (Tile tile) {
-		if (PlaceablePrefab != null && tile.OnTop==null) {
+		if (PlaceablePrefab!=null && tile.OnTop==null) {
 			Interactive iObj = GeneralFabric.CreateObject<Interactive>(PlaceablePrefab, transform.parent);
 			MapController.Instance.PlaceItAt(iObj, tile);
 			if (iObj is Enemy)
@@ -279,6 +290,11 @@ public class Enemy : Characther {
 	#endregion
 
 	#region AIActions --------------------------------------
+	protected void AIPrepareAction (EnemyAI ai) {
+		if (ai != null)
+			ai.PrepareAction(this);
+	}
+	/*
 	protected void AIPrepareAction (AIAction action) {
 		switch (action) {
 		case AIAction.None:
@@ -367,7 +383,7 @@ public class Enemy : Characther {
 			MoveRandom();
 	}
 
-	protected void RunFromPersonageAndAttackRandTile() {
+	protected void RunFromPersonageAndAttackRandTile () {
 		if (!AttackRandomTile())
 			RunFromPersonage();
 	}
@@ -470,7 +486,7 @@ public class Enemy : Characther {
 		if (TargetChar!=null && !TargetChar.IsDead())
 			SetPreparedAction(ActionType.UseAccessory,TargetChar.MyTile);
 	}
-
+	*/
 	#endregion -------------------------------------------
 
 	#region Explode Upon Death Effect --------------------
@@ -496,7 +512,8 @@ public class Enemy : Characther {
 
 	#region Enemy Vision ----------------------------------
 	public void RevealTargetCharacther (Characther target) {
-		if (!_CharStatus.IsBlinded() && target != null && target.MyType == HuntType) {
+		if (!_CharStatus.IsBlinded() && !_SawPersonage &&
+		    target != null && target.MyType == HuntType) {
 			TargetChar = target;
 			_SawPersonage = true;
 			BeSaw(TargetChar);

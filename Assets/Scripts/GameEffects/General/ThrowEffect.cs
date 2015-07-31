@@ -32,7 +32,6 @@ public class ThrowEffect : GameEffect {
 		_Counter = ((_Counter+1)<_Throwable.Count) ? _Counter+1 : 0;
 		
 		_Throwable[_Counter].BeThrown(origin,targetTile);
-		Debug.Log("Jogou!");
 	}
 
 	protected override void DoEffect (Interactive origin, Interactive target) {
