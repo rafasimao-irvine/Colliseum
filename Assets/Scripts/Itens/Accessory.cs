@@ -9,8 +9,10 @@ public class Accessory {
 
 	#pragma warning disable 0649
 	[SerializeField]
-	private int _Delay;
+	private int _UseRange, _Delay;
 	private int _DelayCounter;
+
+	public int UseRange { get { return _UseRange; } }
 
 	[SerializeField]
 	private bool _Permanent;
@@ -109,9 +111,10 @@ public class Accessory {
 
 	#region Actives
 	public void Activate (Interactive origin, Tile target) {
-		if (_ActivateEffect!=null && target!=null) {
-			if (MadeAction())
-				_ActivateEffect.MakeEffect(origin, target);
+		if (MapController.Instance.GetDistance(origin.MyTile,target) < UseRange) {
+			if (_ActivateEffect!=null && target!=null)
+				if (MadeAction())
+					_ActivateEffect.MakeEffect(origin, target);
 		}
 	}
 	#endregion
