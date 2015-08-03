@@ -18,6 +18,9 @@ public class MicroturnObject : MonoBehaviour {
 	[SerializeField]
 	private List<GameEffect> _TurnChangeEffects;
 
+	[SerializeField]
+	private SpinningObject _SpinObj;
+
 	void Start () {
 		ObjectsController objControll = FindObjectOfType<ObjectsController>();
 		if (objControll!=null) objControll.Subscribe(this);
@@ -35,8 +38,17 @@ public class MicroturnObject : MonoBehaviour {
 			if (_DestroyUponBeTriggered) _DestroySelf = true;
 
 			_CurrentTurnMod = 0;
-			for (int i=0; i<_TurnChangeEffects.Count; i++)
-				_TurnChangeEffects[i].MakeEffect(_InteractiveObject, _InteractiveObject);
+			for (int i=0; i<_TurnChangeEffects.Count; i++) {
+				Tile nextTile = null;
+				if (_SpinObj!=null) 
+					nextTile = MapController.Instance.GetNextTile(
+						_InteractiveObject.MyTile, _SpinObj.FacingDirection);
+
+				if(nextTile != null)
+					_TurnChangeEffects[i].MakeEffect(_InteractiveObject, nextTile);
+				else
+					_TurnChangeEffects[i].MakeEffect(_InteractiveObject, _InteractiveObject);
+			}
 		}
 	}
 

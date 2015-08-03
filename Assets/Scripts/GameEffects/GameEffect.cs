@@ -10,7 +10,7 @@ public abstract class GameEffect : MonoBehaviour {
 
 	// Tiles the Effect will occur On
 	public enum EffectTarget {
-		None, Origin, OriginNeighbours, Line, Target, TargetBlock
+		None, Origin, OriginNeighbours, Line, Target, TargetBlock, FrontArea
 	}
 	[SerializeField]
 	private EffectTarget _EffectTarget;
@@ -18,7 +18,7 @@ public abstract class GameEffect : MonoBehaviour {
 	// Effect Range, used to refer to the Effect Target range
 	[SerializeField]
 	private int _EffectRange;
-
+	
 	public void MakeEffect (Interactive origin, Interactive target) {
 		PlayVisualEffect(origin,target.MyTile);
 		PlaySoundEffect();
@@ -39,6 +39,9 @@ public abstract class GameEffect : MonoBehaviour {
 			break;
 		case EffectTarget.TargetBlock:
 			DoEffectToBlock(origin, target.MyTile);
+			break;
+		case EffectTarget.FrontArea:
+			DoEffectToFrontArea(origin, target.MyTile);
 			break;
 		}
 	}
@@ -64,6 +67,9 @@ public abstract class GameEffect : MonoBehaviour {
 		case EffectTarget.TargetBlock:
 			DoEffectToBlock(origin, targetTile);
 			break;
+		case EffectTarget.FrontArea:
+			DoEffectToFrontArea(origin, targetTile);
+			break;
 		}
 	}
 
@@ -87,12 +93,18 @@ public abstract class GameEffect : MonoBehaviour {
 
 	protected void DoEffectToLine (Interactive origin, Tile targetTile) {
 		List<Tile> tiles = MapController.Instance.GetLine(
-			origin.MyTile, MapController.Instance.GetDirection(targetTile, origin.MyTile), _EffectRange);
+			origin.MyTile, MapController.Instance.GetDirection(origin.MyTile, targetTile), _EffectRange);
 		DoEffectToManyTargets(origin,tiles);
 	}
 
 	protected void DoEffectToBlock (Interactive origin, Tile targetTile) {
 		List<Tile> tiles = MapController.Instance.GetBlock(targetTile, _EffectRange);
+		DoEffectToManyTargets(origin,tiles);
+	}
+
+	protected void DoEffectToFrontArea (Interactive origin, Tile targetTile) {
+		List<Tile> tiles = MapController.Instance.GetFrontArea(
+			origin.MyTile, MapController.Instance.GetDirection(targetTile, origin.MyTile));
 		DoEffectToManyTargets(origin,tiles);
 	}
 
