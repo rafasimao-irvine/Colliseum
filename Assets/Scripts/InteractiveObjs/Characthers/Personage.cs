@@ -7,6 +7,9 @@ public class Personage : Characther {
 	// Audios
 	public AudioClip NoWeaponAtkSound, WeaponAtkSound, BeHitSound, DeathSound;
 
+	public PathView PersonagePathView;
+	protected List<Tile> path;
+
 	// Interactions Types
 	protected enum Interactions{
 		None = 0,
@@ -23,7 +26,6 @@ public class Personage : Characther {
 
 	protected int _AccessoryIndex;
 
-	public List<Tile> path;
 
 	// Wait action
 	protected bool _WaitAction = false;
@@ -191,9 +193,18 @@ public class Personage : Characther {
 
 	// Select path tiles
 	private void SelectPath (bool selected) {
+		if (PersonagePathView!=null) {
+			if (_TargetInteractive!=null)
+				PersonagePathView.SelectPath(path,_TargetInteractive.MyTile,selected);
+			else
+				PersonagePathView.SelectPath(path,_TargetTile,selected);
+		}
+
+		/*
 		if(path!=null)
 			foreach(Tile t in path)
 				if (t!=null) t.SelectTile(selected);
+		 */
 	}
 
 	protected override void BecomeInvisible () {}

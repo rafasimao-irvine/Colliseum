@@ -21,7 +21,7 @@ public class Tile : MonoBehaviour, IHeapItem<Tile> {
 
 	// List of Materials
 	public Material[] Materials;
-	public Material SelectedMaterial;
+	//public Material SelectedMaterial;
 
 	// Tile position in map matrix
 	public int X, Y; // TODO put only get
@@ -98,8 +98,8 @@ public class Tile : MonoBehaviour, IHeapItem<Tile> {
 	}
 
 
-	public void SelectTile (bool selected) {
-		if (selected)
+	public void SelectTile (bool selected, Material SelectedMaterial) {
+		if (selected && SelectedMaterial!=null)
 			GetComponent<Renderer>().material = SelectedMaterial;
 		else
 			SetTileType(_Type);
