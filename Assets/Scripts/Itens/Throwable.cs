@@ -46,9 +46,10 @@ public class Throwable : MonoBehaviour {
 	}
 
 	void OnCollisionEnter (Collision other) {
-		Characther c = other.gameObject.GetComponent<Characther>();
-		if (c!=null)
-			_CollisionEffect.MakeEffect(_Origin,c);
+		//Characther c = other.gameObject.GetComponent<Characther>();
+		Interactive interactive = other.gameObject.GetComponent<Interactive>();
+		if (interactive!=null)
+			_CollisionEffect.MakeEffect(_Origin,interactive);
 
 		if (other.rigidbody!=null) {
 			other.rigidbody.angularVelocity = Vector3.zero;

@@ -32,7 +32,6 @@ public class CharHUD : MonoBehaviour {
 		Paralized.SetActive(_Characther.IsParalized());
 	}
 
-
 	public void ShowSurprised () {
 		SurpriseText.gameObject.SetActive(true);
 		Invoke("DeactivateSurprised", 1.2f);
