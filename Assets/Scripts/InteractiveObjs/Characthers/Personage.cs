@@ -199,12 +199,6 @@ public class Personage : Characther {
 			else
 				PersonagePathView.SelectPath(path,_TargetTile,selected);
 		}
-
-		/*
-		if(path!=null)
-			foreach(Tile t in path)
-				if (t!=null) t.SelectTile(selected);
-		 */
 	}
 
 	protected override void BecomeInvisible () {}
