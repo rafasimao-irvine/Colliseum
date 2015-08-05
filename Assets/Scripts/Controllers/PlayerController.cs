@@ -162,8 +162,8 @@ public class PlayerController : TurnController {
 		PlayerPersonage.PrepareWaitAction();
 	}
 
-	public void SwitchWeapons () {
-		PlayerPersonage.SwitchWeapons();
+	public void SwitchWeaponsTo () {
+			PlayerPersonage.SwitchWeapons();
 	}
 
 	public void AccessoryAction (int index) {

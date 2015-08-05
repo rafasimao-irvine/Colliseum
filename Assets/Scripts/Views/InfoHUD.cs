@@ -22,8 +22,7 @@ public class InfoHUD : MonoBehaviour {
 			EnemiesSightView.ShowDoubleSight(
 				_PreviousEnemy.MyTile, 
 				_PreviousEnemy.GetVisionRange(), 
-				_PreviousEnemy.GetCurrentAttackRange(), 
-				true);
+				_PreviousEnemy.GetCurrentAttackRange());
 		}
 	}
 
@@ -32,11 +31,7 @@ public class InfoHUD : MonoBehaviour {
 		IsShowing = false;
 		// Hide enemy sight
 		if(_PreviousEnemy!=null) {
-			EnemiesSightView.ShowDoubleSight(
-				_PreviousEnemy.MyTile, 
-				_PreviousEnemy.GetVisionRange(), 
-				_PreviousEnemy.GetCurrentAttackRange(), 
-				false);
+			EnemiesSightView.ShutOffLastSight();
 			_PreviousEnemy = null;
 		}
 	}
