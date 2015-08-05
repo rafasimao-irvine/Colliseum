@@ -258,7 +258,7 @@ public abstract class Characther : Attackable {
 		return _Strength + UseStrengthModifiers(target);
 	}
 
-	protected int GetCurrentAttackRange () {
+	public int GetCurrentAttackRange () {
 		if (_CharWeapons.IsAnyFirstWeaponEquipped())
 			return _CharWeapons.GetFirstWeaponAttackRange() + _CharAccessories.GetRangeModifier();
 		return _AtkRange + _CharAccessories.GetRangeModifier();
