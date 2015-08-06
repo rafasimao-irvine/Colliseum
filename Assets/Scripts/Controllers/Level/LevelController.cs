@@ -74,7 +74,7 @@ public class LevelController : MonoBehaviour {
 			weaponsHUD.UpdateWeapons();
 			// Accessories HUD update
 			_Personage.SetCharAccessoriesHUD(accessoriesHUD);
-			accessoriesHUD.AccessoriesChar = _Personage;
+			//accessoriesHUD.AccessoriesChar = _Personage;
 			accessoriesHUD.UpdateAccessories();
 		}
 	}

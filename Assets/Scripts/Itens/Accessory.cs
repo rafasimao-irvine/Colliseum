@@ -10,9 +10,10 @@ public class Accessory {
 	#pragma warning disable 0649
 	[SerializeField]
 	private int _UseRange, _Delay;
-	private int _DelayCounter;
+	//private int _DelayCounter;
 
 	public int UseRange { get { return _UseRange; } }
+	public int Delay { get { return _Delay; } }
 
 	[SerializeField]
 	private bool _Permanent;
@@ -34,15 +35,17 @@ public class Accessory {
 	private GameEffect _ActivateEffect;
 	#pragma warning restore 0649
 
+	/*
 	public void UpdateAccessory () {
 		if (_DelayCounter <= _Delay)
 			_DelayCounter++;
-	}
+	}*/
 
 	protected bool MadeAction () {
-		if (IsReady() && !IsBroken()) {
+		//if (IsReady() && !IsBroken()) {
+		if (!IsBroken()) {
 			//reboot cooldown
-			_DelayCounter=0;
+			//_DelayCounter=0;
 			// Decrease Durability
 			if (!_Permanent) _Durability--;
 
@@ -55,9 +58,11 @@ public class Accessory {
 		return (!_Permanent && _Durability<1);
 	}
 
+	/*
 	public bool IsReady () {
 		return (_DelayCounter > _Delay);
 	}
+	*/
 
 	public bool IsActivatable () {
 		return (_ActivateEffect != null);
@@ -110,12 +115,17 @@ public class Accessory {
 	#endregion
 
 	#region Actives
-	public void Activate (Interactive origin, Tile target) {
+	public bool Activate (Interactive origin, Tile target) {
 		if (MapController.Instance.GetDistance(origin.MyTile,target) <= UseRange) {
-			if (_ActivateEffect!=null && target!=null)
-				if (MadeAction())
+			if (_ActivateEffect!=null && target!=null) {
+				if (MadeAction()) {
 					_ActivateEffect.MakeEffect(origin, target);
+					return true;
+				}
+			}
 		}
+
+		return false;
 	}
 	#endregion
 

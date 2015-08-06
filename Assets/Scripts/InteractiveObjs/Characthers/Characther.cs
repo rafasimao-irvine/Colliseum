@@ -231,13 +231,17 @@ public abstract class Characther : Attackable {
 		return _CharAccessories.GetAccessory(pos);
 	}
 
+	public int GetAccessoriesDelay () {
+		return _CharAccessories.GetDelay();
+	}
+
 	public void RemoveAccessory (int pos) {
 		_CharAccessories.RemoveAccessory(pos);
 	}
 
 	// Accessory Action
-	public void ActivateAccessory (int index, Tile tile) {
-		_CharAccessories.Activate(index, this, tile);
+	public bool ActivateAccessory (int index, Tile tile) {
+		return _CharAccessories.Activate(index, this, tile);
 	}
 
 	// BeSaw by another char

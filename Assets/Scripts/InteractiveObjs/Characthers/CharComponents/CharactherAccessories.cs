@@ -5,8 +5,11 @@ using System.Collections.Generic;
 public class CharactherAccessories {
 
 	private Accessory[] _Accessories;
+	private Accessory _UsedAccessory;
 	private int _MaxAccessories;
 	public AccessoriesHUD CharAccessoriesHUD;
+
+	private int _DelayCounter;
 
 	public CharactherAccessories (int initialMax, int maxMax, AccessoriesHUD accessoriesHUD) {
 		_MaxAccessories = initialMax;
@@ -23,13 +26,15 @@ public class CharactherAccessories {
 	public void UpdateAccessories () {
 		for (int i=0; i<_MaxAccessories; i++) {
 			if (_Accessories[i]!=null) {
-				_Accessories[i].UpdateAccessory();
+				//_Accessories[i].UpdateAccessory();
 				if (_Accessories[i].IsBroken()) {
 					_Accessories[i].BeDestroyed();
 					_Accessories[i] = null;
 				}
 			}
 		}
+
+		_DelayCounter--;
 
 		UpdateAccessoryHUD();
 	}
@@ -132,9 +137,20 @@ public class CharactherAccessories {
 	#endregion
 
 	#region Actives
-	public void Activate (int index, Characther c, Tile onTile) {
-		if (_Accessories[index]!=null)
-			_Accessories[index].Activate(c,onTile);
+	public bool Activate (int index, Characther c, Tile onTile) {
+		if (_DelayCounter < 0) {
+			if (_Accessories[index] != null) {
+				if (_Accessories[index].Activate(c,onTile)) {
+					_DelayCounter = _Accessories[index].Delay;
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	public int GetDelay () { 
+		return _DelayCounter; 
 	}
 	#endregion
 

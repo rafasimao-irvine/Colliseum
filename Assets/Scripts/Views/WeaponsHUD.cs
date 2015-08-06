@@ -16,11 +16,11 @@ public class WeaponsHUD : MonoBehaviour {
 	}
 
 	void Update () {
-		#if UNITY_EDITOR
+#if UNITY_EDITOR
 		VerifyMouseInput();
-		#elif UNITY_ANDROID || UNITY_IOS
+#elif UNITY_ANDROID || UNITY_IOS
 		VerifyTouchInput();
-		#endif
+#endif
 	}
 
 	#region Verify Touch
@@ -47,11 +47,12 @@ public class WeaponsHUD : MonoBehaviour {
 			text.text = "Hand";
 	}
 
+	#region Weapons Butons
 	public void SelectWeapon (bool isSecondWeapon) {
 		if (isSecondWeapon)
 			WeaponsPlayerController.SwitchWeapons();
 
 		PersonageSightView.ShowSingleSight(WeaponsChar.MyTile,WeaponsChar.GetCurrentAttackRange());
 	}
-
+	#endregion
 }

@@ -154,15 +154,18 @@ public class Personage : Characther {
 		// Otherwise, move
 		AddMoveTo(path[0]);
 		ActivateMoveFowardAtk(MapController.Instance.GetDirection(MyTile,path[0]));
-		if(path[0]==target) InterruptActions();
+		if (path[0]==target) 
+			InterruptActions();
 
 		return true; // Return that an action occurred
 	}
 
 	private bool MakeAccessoryAction () {
-		ActivateAccessory(_AccessoryIndex,_TargetTile);
-		InterruptActions();
-		return true;
+		if (ActivateAccessory(_AccessoryIndex,_TargetTile)) {
+			InterruptActions();
+			return true;
+		}
+		return false;
 	}
 
 	public void InterruptActions () {
