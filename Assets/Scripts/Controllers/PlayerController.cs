@@ -9,8 +9,6 @@ public class PlayerController : TurnController {
 
 	public Personage PlayerPersonage;
 
-	public SightView PersonageSightView;
-
 	private Characther _SelectedChar;
 
 	private bool _MadeAction;
@@ -110,8 +108,6 @@ public class PlayerController : TurnController {
 		if(Input.GetMouseButtonDown(0)) {
 			FirstPressAction(Input.mousePosition, -1);
 			_PressTimer = Time.time;
-
-			PersonageSightView.ShutOffLastSight(); // Shut off SightView
 		}
 
 		if(Input.GetMouseButton(0))
@@ -139,8 +135,6 @@ public class PlayerController : TurnController {
 			// End of the swipe, release the swipe
 			if(t.phase == TouchPhase.Ended)
 				SecondPressAction(t.position, 0);
-
-			PersonageSightView.ShutOffLastSight(); // Shut off SightView
 		}
 	}
 
@@ -167,19 +161,13 @@ public class PlayerController : TurnController {
 		PlayerPersonage.PrepareWaitAction();
 	}
 
-	public void SwitchWeaponsTo () {
+	public void SwitchWeapons () {
 		PlayerPersonage.SwitchWeapons();
-
-		// Show weapon SightView
-		PersonageSightView.ShowSingleSight(PlayerPersonage.MyTile,PlayerPersonage.GetCurrentAttackRange());
 	}
 
 	public void AccessoryAction (int index) {
 		_IsAccessoryAction = true;
 		_AccessoryIndex = index;
-
-		// Show accessory SightView
-		PersonageSightView.ShowSingleSight(PlayerPersonage.MyTile,PlayerPersonage.GetAccessory(index).UseRange);
 	}
 
 	public void CancelAccessoryAction (int index) {

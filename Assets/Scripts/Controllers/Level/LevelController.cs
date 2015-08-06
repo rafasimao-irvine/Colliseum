@@ -70,7 +70,7 @@ public class LevelController : MonoBehaviour {
 			FindObjectOfType<Logger>().LogPersonage = _Personage;
 			// Weapons HUD update
 			_Personage.SetCharWeaponsHUD(weaponsHUD);
-			weaponsHUD.WeaponsChar = _Personage;
+			//weaponsHUD.WeaponsChar = _Personage;
 			weaponsHUD.UpdateWeapons();
 			// Accessories HUD update
 			_Personage.SetCharAccessoriesHUD(accessoriesHUD);
