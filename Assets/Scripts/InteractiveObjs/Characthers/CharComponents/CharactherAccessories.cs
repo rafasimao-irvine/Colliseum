@@ -34,9 +34,9 @@ public class CharactherAccessories {
 			}
 		}
 
-		_DelayCounter--;
-
 		UpdateAccessoryHUD();
+
+		_DelayCounter--;
 	}
 
 	public Accessory EquipAccessory (Accessory accessory, int index) {

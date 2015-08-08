@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using System.Collections;
 
 public class AccessoriesHUD : MonoBehaviour {
@@ -9,8 +8,8 @@ public class AccessoriesHUD : MonoBehaviour {
 
 	public SightView PersonageSightView;
 
-	public Button[] BtAccessory;
-	public Text[] TextAccessory;
+	public AccessoryHUD[] AccessoriesHUDs; 
+	private int _LastAccessorySelectedIndex;
 
 	void Start () {
 		AccessoriesChar = AccessoriesPlayerController.PlayerPersonage;
@@ -37,18 +36,13 @@ public class AccessoriesHUD : MonoBehaviour {
 	#endregion
 
 	public void UpdateAccessories () {
-		for (int i=0; i<BtAccessory.Length; i++)
-			UpdateAccessoryInfo(BtAccessory[i], TextAccessory[i], AccessoriesChar.GetAccessory(i));
-	}
-	
-	private void UpdateAccessoryInfo (Button bt, Text t, Accessory a) {
-		if (a == null) {
-			bt.interactable = false;
-			t.text = "Empty";
-		} else {
-			bt.interactable = true;
-			t.text = a.MyGameObject.name.Substring(0,a.MyGameObject.name.Length-7);
-		}
+		bool isOnDelay = (AccessoriesChar.GetAccessoriesDelay() > -1);
+		for (int i=0; i<AccessoriesHUDs.Length; i++)
+			AccessoriesHUDs[i].UpdateAccessoryInfo(AccessoriesChar.GetAccessory(i), isOnDelay);
+
+		if (isOnDelay)
+			AccessoriesHUDs[_LastAccessorySelectedIndex].ActivateAccessoryDelayRocks(
+				AccessoriesChar.GetAccessoriesDelay());
 	}
 
 	#region Accessories Buttons
@@ -62,6 +56,8 @@ public class AccessoriesHUD : MonoBehaviour {
 
 		PersonageSightView.ShowSingleSight(
 			AccessoriesChar.MyTile, AccessoriesChar.GetAccessory(index).UseRange);
+
+		_LastAccessorySelectedIndex = index;
 	} 
 	#endregion
 
