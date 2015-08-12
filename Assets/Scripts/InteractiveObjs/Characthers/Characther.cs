@@ -204,6 +204,12 @@ public abstract class Characther : Attackable {
 		_CharAccessories.OnBeAttacked(this, iObj);
 	}
 
+	public void BeKilled (Interactive iObj) {
+		_CharStatus.BeAbsorptive(0);
+		_CharStatus.BeDefensive(0);
+		BeAttacked(iObj, _Life);
+	}
+
 	// Itens --------------------------------------------
 	/* Weapon *********/
 	public Weapon TryToEquip (Weapon weapon) {

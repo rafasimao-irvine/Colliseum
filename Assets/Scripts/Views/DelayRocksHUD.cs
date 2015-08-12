@@ -9,8 +9,10 @@ public class DelayRocksHUD : MonoBehaviour {
 
 	public GameObject _RockPrefab;
 
+	#pragma warning disable 0649
 	[SerializeField]
 	private int _IniXY, _NPerEdge, _BlockSize, _InnerSpace;
+	#pragma warning restore 0649
 
 	private List<Image> _RocksImages;
 

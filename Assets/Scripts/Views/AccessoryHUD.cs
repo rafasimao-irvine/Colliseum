@@ -9,17 +9,17 @@ public class AccessoryHUD : MonoBehaviour {
 	public DelayRocksHUD DelayRocksHUDAccessory;
 
 	public void UpdateAccessoryInfo (Accessory a, bool isOnDelay) {
+
+		bool isInteractable = false;
 		if (a == null) {
-			BtAccessory.interactable = false;
 			TextAccessory.text = "Empty";
 		} else {
-			BtAccessory.interactable = true;
+			if (!isOnDelay)
+				isInteractable = true;
 			TextAccessory.text = a.MyGameObject.name.Substring(0,a.MyGameObject.name.Length-7);
 			DelayRocksHUDAccessory.FixRocksSize(a.Delay);
 		}
-
-		if (isOnDelay)
-			BtAccessory.interactable = false;
+		BtAccessory.interactable = isInteractable;
 	}
 
 	public void ActivateAccessoryDelayRocks (int n) {
