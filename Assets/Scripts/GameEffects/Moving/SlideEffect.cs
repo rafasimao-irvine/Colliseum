@@ -17,8 +17,11 @@ public class SlideEffect : GameEffect {
 	private bool _Knockback;
 
 	void Start () {
-		if (_IsRandomDefinedDirection)
+		if (_IsRandomDefinedDirection) {
 			_Direction = new Vector2(Random.Range(-1,2),Random.Range(-1,2));
+			if (_Direction.x==0 && _Direction.y==0)
+				_Direction = new Vector2(1,1);
+		}
 	}
 
 	protected override void DoEffect (Interactive origin, Interactive target) {
