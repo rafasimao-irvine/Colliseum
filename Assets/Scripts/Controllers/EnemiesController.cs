@@ -89,12 +89,23 @@ public class EnemiesController : TurnController {
 	// Chains the target revealing vision to the near enemies
 	private void ChainEnemiesSeeTarget () {
 		List<Enemy> eWhoSaw = new List<Enemy>();
+		List<Enemy> eWhoAlarm = new List<Enemy>();
 		foreach (Enemy e in _Enemies) {
 			if (e.PreparedAction.Type == Enemy.ActionType.SeeTarget)
 			    //&& e.TargetChar == PlayerController.PlayerPersonage)
 				eWhoSaw.Add(e);
+			if (e.PreparedAction.Type == Enemy.ActionType.MoveAndAlarm) {
+				eWhoAlarm.Add(e);
+				e.SetPreparedAction(
+					Enemy.ActionType.Move, e.PreparedAction.TargetTile, e.PreparedAction.TargetChar);
+			}
 		}
 
+		AlarmEnemiesNear(eWhoSaw);
+		AlarmEnemiesNear(eWhoAlarm);
+	}
+
+	private void AlarmEnemiesNear (List<Enemy> eWhoSaw) {
 		MapController map = MapController.Instance;
 
 		foreach (Enemy eSaw in eWhoSaw) {
