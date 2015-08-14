@@ -38,8 +38,8 @@ public class DashEffect : GameEffect {
 			}
 
 			if (selected >= 0 && origin != null) {
-				if (origin is Characther) 
-					((Characther)origin).AddMovementFeat(new DashFeat(line[selected], _DashSpeed));
+				if (origin is Characther) // Changed Dash to Ghost to avoid collisions
+					((Characther)origin).AddMovementFeat(new GhostRunFeat(line[selected], _DashSpeed));
 				if (origin is Personage) ((Personage)origin).InterruptActions();
 			}
 		}
