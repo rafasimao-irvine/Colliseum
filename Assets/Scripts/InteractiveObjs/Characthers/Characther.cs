@@ -325,6 +325,10 @@ public abstract class Characther : Attackable {
 		_CharStatus.BeAbsorptive(turns);
 	}
 
+	public void BeFlying (int turns) {
+		_CharStatus.BeFlying(turns);
+	}
+
 	// Getters
 	public bool IsTrapped () {
 		return _CharStatus.IsTrapped();
@@ -352,6 +356,10 @@ public abstract class Characther : Attackable {
 
 	public bool IsAbsorbing () {
 		return _CharStatus.IsAbsorbing();
+	}
+
+	public bool IsFlying () {
+		return _CharStatus.IsFlying();
 	}
 	#endregion
 

@@ -41,10 +41,11 @@ public class ObjectHead : Interactive {
 
 	public override bool BeEntered (Characther c) {
 		bool isDestroyed = _DestroySelf;
-		if (_DestroyUponBeEntered) _DestroySelf=true;
+		if (!c.IsFlying() && _DestroyUponBeEntered) 
+			_DestroySelf=true;
 
 		if (_CharInto==null) {
-			if (_BeEnteredEffect!=null && !isDestroyed)
+			if (!c.IsFlying() && _BeEnteredEffect!=null && !isDestroyed)
 				_BeEnteredEffect.MakeEffect(this, c);
 
 			_CharInto = c;

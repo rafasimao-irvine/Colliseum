@@ -10,6 +10,7 @@ public class CharactherStatus {
 	protected int _DefenseTurns = 0;
 	protected int _InvisibleTurns = 0;
 	protected int _AbsorbTurns = 0;
+	protected int _FlyingTurns = 0;
 	
 	protected bool _IsBuffed = false;
 	//protected int _BuffTurns = 0;
@@ -25,6 +26,7 @@ public class CharactherStatus {
 		if (_DefenseTurns>0) _DefenseTurns--;
 		if (_InvisibleTurns>0) _InvisibleTurns--;
 		if (_AbsorbTurns>0) _AbsorbTurns--;
+		if (_FlyingTurns>0) _FlyingTurns--;
 	}
 
 	public bool IsTrapped () {
@@ -53,6 +55,10 @@ public class CharactherStatus {
 
 	public bool IsAbsorbing () {
 		return (_AbsorbTurns > 0);
+	}
+
+	public bool IsFlying () {
+		return (_FlyingTurns > 0);
 	}
 
 	#region Users
@@ -108,6 +114,11 @@ public class CharactherStatus {
 	public void BeAbsorptive (int turns) {
 		_AbsorbTurns = turns;
 		Logger.strLog += "\n"+GetType()+" vai absorver danos por "+turns+" turnos.";
+	}
+
+	public void BeFlying (int turns) {
+		_FlyingTurns = turns;
+		Logger.strLog += "\n"+GetType()+" esta voando por "+turns+" turnos.";
 	}
 	#endregion
 }
