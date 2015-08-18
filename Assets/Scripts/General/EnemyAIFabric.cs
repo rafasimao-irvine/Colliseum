@@ -8,7 +8,7 @@ public class EnemyAIFabric {
 		RunFromPersonage, RunAttackRand, MoveRandAttackRand,
 		MoveRandAndHeal, MoveRandAndFusion, FollowAndFusion,
 		FollowAndPlaceTraps, RunAndAlarm, MoveRandAndInvoke,
-		UseAccessoryOnTarget
+		UseAccessoryOnTarget, UseAccessoryOnSelf
 	}
 
 	public static EnemyAI CreateEnemyAI (AIAction action) {
@@ -54,6 +54,9 @@ public class EnemyAIFabric {
 			break;
 		case AIAction.UseAccessoryOnTarget:
 			enemyAI = new UseAccessoryOnTargetAI();
+			break;
+		case AIAction.UseAccessoryOnSelf:
+			enemyAI = new UseAccessoryOnSelfAI();
 			break;
 		}
 

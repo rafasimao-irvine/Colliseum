@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class Enemy : Characther {
 
-	[HideInInspector]
+	//[HideInInspector]
 	public Characther TargetChar;
 
 	public GameObject PlaceablePrefab;

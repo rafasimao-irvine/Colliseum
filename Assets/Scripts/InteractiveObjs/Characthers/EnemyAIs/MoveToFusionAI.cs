@@ -18,7 +18,7 @@ public class MoveToFusionAI : EnemyAI {
 				Enemy eOther = (Enemy)tiles[i].OnTop.GetBeAttackedTarget();
 				if (eOther.gameObject.name.Equals(e.gameObject.name)) {
 					if (MapController.Instance.GetDistance(e.MyTile,eOther.MyTile) > 1)
-						_FollowCharAI.PrepareAction(eOther);
+						_FollowCharAI.PrepareAction(e,eOther);
 					else {
 						e.SetPreparedAction(Enemy.ActionType.Fusion, eOther);
 						eOther.SetPreparedAction(Enemy.ActionType.None);

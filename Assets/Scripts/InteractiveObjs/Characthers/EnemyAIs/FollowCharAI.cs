@@ -4,11 +4,14 @@ using System.Collections.Generic;
 
 public class FollowCharAI : EnemyAI {
 
-	public Characther TargetChar;
-
 	public override bool PrepareAction (Enemy e) {
-		if (TargetChar==null) TargetChar = e.TargetChar;
-		List<Tile> path = MapController.Instance.FindPath(e.MyTile, TargetChar.MyTile);
+		PrepareAction(e,null);
+		return true;
+	}
+
+	public bool PrepareAction (Enemy e, Characther targetChar) {
+		Characther target = (targetChar==null) ? e.TargetChar : targetChar; 
+		List<Tile> path = MapController.Instance.FindPath(e.MyTile, target.MyTile);
 		
 		// Start the movement
 		if (path != null && path.Count > 0)
