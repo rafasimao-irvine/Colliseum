@@ -3,6 +3,8 @@ using System.Collections;
 
 public class CharactherStatus {
 
+	protected Characther _Char;
+
 	// Status
 	protected int _TrappedTurns = 0;
 	protected int _ParalizedTurns = 0;
@@ -13,11 +15,13 @@ public class CharactherStatus {
 	protected int _FlyingTurns = 0;
 	
 	protected bool _IsBuffed = false;
-	//protected int _BuffTurns = 0;
 	protected int _StrBuff = 0;
-	//protected int _AtkRangeBuff = 0;
 
 	//----------------------------------------------------
+
+	public CharactherStatus (Characther c) {
+		_Char = c;
+	}
 
 	public void UpdateStatus () {
 		if (_TrappedTurns>0) _TrappedTurns--;
@@ -26,7 +30,13 @@ public class CharactherStatus {
 		if (_DefenseTurns>0) _DefenseTurns--;
 		if (_InvisibleTurns>0) _InvisibleTurns--;
 		if (_AbsorbTurns>0) _AbsorbTurns--;
-		if (_FlyingTurns>0) _FlyingTurns--;
+		if (_FlyingTurns>0) { 
+			_FlyingTurns--;
+			if (!IsFlying()) {
+				_Char.MyTile.TryGetOut(_Char);
+				_Char.MyTile.TryGetIn(_Char);
+			}
+		}
 	}
 
 	public bool IsTrapped () {
@@ -85,9 +95,7 @@ public class CharactherStatus {
 	
 	public void BeBuffered (int strBuff) {
 		_StrBuff = strBuff;
-		//_AtkRangeBuff = atkRangeBuff;
 		_IsBuffed = true;
-		//_BuffTurns = turns;
 		Logger.strLog += "\n"+GetType()+" recebeu buff: +"+strBuff+" dano.";
 	}
 

@@ -38,7 +38,7 @@ public abstract class Characther : Attackable {
 	// Initiates
 	virtual protected void Start () {
 		if (_CharStatus == null)
-			_CharStatus = new CharactherStatus();
+			_CharStatus = new CharactherStatus(this);
 		if (_CharMovement == null)
 			_CharMovement = new CharactherMovement(this);
 		if (_CharWeapons == null)
