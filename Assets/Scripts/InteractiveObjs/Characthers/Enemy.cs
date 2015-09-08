@@ -47,9 +47,9 @@ public class Enemy : Characther {
 	protected EnemyAIFabric.AIAction _NoPersonageAction, _SawPersonageAction, _PersonageInRangeAction;
 	protected EnemyAI _NoPersonageAI, _SawPersonageAI, _PersonageInRangeAI;
 
-	// Boomer
+	// Death effects
 	[SerializeField]
-	protected bool _ExplodeUponDeath;
+	protected bool _DisappearUponDeath, _ExplodeUponDeath;
 	protected bool _Exploded = false;
 	[SerializeField]
 	protected int _ExplosionDamage = 1;
@@ -294,7 +294,7 @@ public class Enemy : Characther {
 		if (ai != null)
 			ai.PrepareAction(this);
 	}
-	/*
+	/**
 	protected void AIPrepareAction (AIAction action) {
 		switch (action) {
 		case AIAction.None:
@@ -496,6 +496,10 @@ public class Enemy : Characther {
 			RefreshMyTile(); // So that it explodes where it was, even if it was moving
 			_Exploded = true;
 			Explode();
+		}
+		if (_DisappearUponDeath && IsDead()) {
+			CharacthersHolder.Instance.RemoveChar(this);
+			Destroy(gameObject);
 		}
 	}
 

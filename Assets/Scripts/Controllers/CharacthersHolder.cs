@@ -48,7 +48,7 @@ public class CharacthersHolder : MonoBehaviour {
 		AllChars.Add(c);
 	}
 
-	private void RemoveChar (Characther c) {
+	public void RemoveChar (Characther c) {
 		switch (c.MyType) {
 		case Characther.Types.None:
 			break;
